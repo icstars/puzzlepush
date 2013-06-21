@@ -1,0 +1,5 @@
+C:\Users\webstudio\Documents\Visual Studio 2010\Projects\puzzlepush\puzzlepush\bin\puzzlepush.dll
+C:\Users\webstudio\Documents\Visual Studio 2010\Projects\puzzlepush\puzzlepush\bin\puzzlepush.pdb
+C:\Users\webstudio\Documents\Visual Studio 2010\Projects\puzzlepush\puzzlepush\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\webstudio\Documents\Visual Studio 2010\Projects\puzzlepush\puzzlepush\obj\Debug\puzzlepush.dll
+C:\Users\webstudio\Documents\Visual Studio 2010\Projects\puzzlepush\puzzlepush\obj\Debug\puzzlepush.pdb
