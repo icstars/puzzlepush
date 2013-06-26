@@ -16,14 +16,10 @@ namespace puzzlepush
         {
             string ConnectionString;
             ConnectionString = "Password=!31497Oo;User ID=dbdev;Initial Catalog=HW;Integrated Security=True;Trusted_Connection=No;Data Source=ics-c28-02.cloudapp.net";
-
             SqlConnection objConn = new SqlConnection(ConnectionString);
-
-            SqlDataAdapter MyAdapter = new SqlDataAdapter("dbo.hello_world", objConn);
-
-
-
+            SqlDataAdapter MyAdapter = new SqlDataAdapter("selecthelloworldbyid'1'", objConn);
             DataSet ds = new DataSet();
+
             try
             {
                 objConn.Open();
@@ -34,11 +30,9 @@ namespace puzzlepush
                 Response.Write(ex.Message);
             }
 
-            // DataRow drow = ds.Tables["hw"].Rows[0];
-            // string retval = drow["username"].ToString();
-
             string json = JsonConvert.SerializeObject(ds);
             Response.Write(json);
+            
         }
     }
 }
