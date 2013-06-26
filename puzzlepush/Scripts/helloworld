@@ -1,0 +1,28 @@
+
+function getContent(hw.aspx)
+{
+	var HelloWorldString; 
+
+	$.ajax({
+		url: http://hw.aspx
+		type:'GET'
+		dataType:'JSON'
+		success:function(data){
+				// get the hello world string from the data
+				// helloWorldString = data.HelloWorldString;
+				if(filename == 'hw.aspx')
+					{
+						setTimeout(function(){
+							$('HelloWorld').html(data);
+						}, 2000);
+					}
+				else 
+				{
+					error: function(errorThrown)
+					alert('error')
+					.log('errorThrown');
+				}
+        }
+	});
+			return HelloWorldString; 
+},
