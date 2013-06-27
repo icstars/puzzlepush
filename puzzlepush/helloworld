@@ -1,10 +1,11 @@
-html>
+<html>
+
 	<head>
 	
 		<title>hello world</title>
 		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-		<script type="text/javascript" src="Scripts/helloworld.js"></script> 
+		<script type="text/javascript" src="Scripts/test.js"></script> 
 
 	</head>
 		<body>
@@ -23,7 +24,7 @@ html>
 			//"#hwResults").innerHTML = hwString;
 			}
 			
-			/ document means, entire page. Ready function means
+			// document means, entire page. Ready function means
 			//saying to when function is done do something
 			//$(document).ready(function(){
 			//make helloworld an object
