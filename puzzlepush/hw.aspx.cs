@@ -44,7 +44,7 @@ namespace puzzlepush
             catch (Exception ex)
             {
                 //write any error messages
-            //    Response.Write(ex.Message);
+                Console.Write(ex.Message);
             }
 
             //Using Newtonsoft's JSON.NET, convert our dataset object from C# to JSON (JavaScript Object Notation)

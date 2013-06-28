@@ -12,11 +12,12 @@
 </head>
 <body>
 
-    <div id="Result">Why wont this work</div>
+    <div id="Result">Click here if you like JQuery</div>
     
     <script>
-        $(document).ready(function () {
+       $(document).ready(function () {
             $("#Result").click(function () {
+                //ajax finds the c# method and runs it, puts it in "msg"
                 $.ajax({
                     type: "POST",
                     url: "hw.aspx/getjson",
