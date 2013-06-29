@@ -6,7 +6,7 @@ function displayMessageCall(){
         //url: "http://icstarstestserv.appspot.com/icstarstest",
         //data: 'HelloWorld',
         // contentType:"application/json",
-         dataType:"json", 
+         dataType:"json",
         success: function(msg){
         $("#HelloWorldString").text(msg);
         alert(msg);
