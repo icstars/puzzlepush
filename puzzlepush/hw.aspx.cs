@@ -26,29 +26,29 @@ namespace puzzlepush
         {
             // define a connection to the database 
             string ConnectionString;
-            ConnectionString = "Password=!31497Oo;User ID=dbdev;Initial Catalog=HW;Integrated Security=True;Trusted_Connection=No;Data Source=ics-c28-02.cloudapp.net";
-            SqlConnection objConn = new SqlConnection(ConnectionString);
-
-            //run an sql query and create a dataset to store the result
-            SqlDataAdapter MyAdapter = new SqlDataAdapter("selecthelloworldbyid'1'", objConn);
-            DataSet ds = new DataSet();
-
+            string json;
             try
             {
+                ConnectionString = "Password=!31497Oo;User ID=dbdev;Initial Catalog=HW;Integrated Security=True;Trusted_Connection=No;Data Source=ics-c28-02.cloudapp.net";
+                SqlConnection objConn = new SqlConnection(ConnectionString);
+
+                //run an sql query and create a dataset to store the result
+                SqlDataAdapter MyAdapter = new SqlDataAdapter("selecthelloworldbyid'1'", objConn);
+                DataSet ds = new DataSet();
                 //open the connection to the database
                 //fill the dataset with the results from the sql query and name the table 'hw'
                 objConn.Open();
                 MyAdapter.Fill(ds, "hw");
+                //Using Newtonsoft's JSON.NET, convert our dataset object from C# to JSON (JavaScript Object Notation)
+                json = JsonConvert.SerializeObject(ds);
             }
 
             catch (Exception ex)
             {
                 //write any error messages
-                Console.Write(ex.Message);
+                //Console.Write(ex.Message);
+                json = JsonConvert.SerializeObject(ex);
             }
-
-            //Using Newtonsoft's JSON.NET, convert our dataset object from C# to JSON (JavaScript Object Notation)
-            string json = JsonConvert.SerializeObject(ds);
             
             return json;
 
