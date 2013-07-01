@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="makearray.aspx.cs" Inherits="RandomArray.makearray" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="randomarray.aspx.cs" Inherits="puzzlepush.randomarray" %>
 
 <!DOCTYPE html>
 

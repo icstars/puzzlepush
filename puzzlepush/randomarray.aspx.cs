@@ -9,11 +9,10 @@ using System.Data;
 using System.Data.SqlClient;
 using Newtonsoft.Json;
 
-namespace RandomArray
+namespace puzzlepush
 {
-    public partial class makearray : System.Web.UI.Page
+    public partial class randomarray : System.Web.UI.Page
     {
-
         //List<string> mylist = new List<string>();
         string[,] mylist = new string[5, 5];
         Random number = new Random();
@@ -46,6 +45,5 @@ namespace RandomArray
             int rn = number.Next(0, 6);
             return rn;
         }
-
     }
 }

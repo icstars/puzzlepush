@@ -7,11 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RandomArray
+namespace puzzlepush
 {
 
 
-    public partial class makearray
+    public partial class randomarray
     {
 
         /// <summary>

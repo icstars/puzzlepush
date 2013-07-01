@@ -1,7 +1,0 @@
-C:\Users\rmarcinik\Documents\GitHub\puzzlepush\puzzlepush\RandomArray\RandomArray\bin\RandomArray.dll
-C:\Users\rmarcinik\Documents\GitHub\puzzlepush\puzzlepush\RandomArray\RandomArray\bin\RandomArray.pdb
-C:\Users\rmarcinik\Documents\GitHub\puzzlepush\puzzlepush\RandomArray\RandomArray\bin\Newtonsoft.Json.dll
-C:\Users\rmarcinik\Documents\GitHub\puzzlepush\puzzlepush\RandomArray\RandomArray\bin\Newtonsoft.Json.pdb
-C:\Users\rmarcinik\Documents\GitHub\puzzlepush\puzzlepush\RandomArray\RandomArray\bin\Newtonsoft.Json.xml
-C:\Users\rmarcinik\Documents\GitHub\puzzlepush\puzzlepush\RandomArray\RandomArray\obj\Debug\RandomArray.dll
-C:\Users\rmarcinik\Documents\GitHub\puzzlepush\puzzlepush\RandomArray\RandomArray\obj\Debug\RandomArray.pdb
