@@ -71,8 +71,10 @@
     <Content Include="Account\ChangePasswordSuccess.aspx" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Register.aspx" />
+    <Content Include="helloworld1.html" />
     <Content Include="hw.aspx" />
     <Content Include="randomarray.aspx" />
+    <Content Include="Scripts\test.js" />
     <Content Include="Styles\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />

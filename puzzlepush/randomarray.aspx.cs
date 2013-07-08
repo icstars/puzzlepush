@@ -22,11 +22,10 @@ namespace puzzlepush
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //connect();
             
 
-            //string json = JsonConvert.SerializeObject(arrayer());
-            //Response.Write(json);
+            string json = JsonConvert.SerializeObject(ds);
+            Response.Write(json);
         }
 
         [WebMethod]
@@ -44,13 +43,14 @@ namespace puzzlepush
             //makes a 2D array and adds each element from the DataTable list to it
             string[,] myarray = new string[5, 5];
             List<String> names = makelist();
-
+            List<String> namestest = new List<String>() {"A","B","C","D","E" };
+            
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
                     String n = names[randomnumber()];
-
+                    //String n = namestest[randomnumber()];
                     myarray[i, j] = n;
                 };
             }
@@ -66,7 +66,7 @@ namespace puzzlepush
             {
                 string s = (string)dt.Rows[i]["image_name"];
                 stringlist.Add(s);
-
+                
             }
             return stringlist;
         }
@@ -82,7 +82,7 @@ namespace puzzlepush
         {
             try
             {
-                string ConnectionString = "Password=!31497Oo;User ID=dbdev;Initial Catalog=pp;Integrated Security=True;Trusted_Connection=No;Data Source=ics-c28-02.cloudapp.net";
+                string ConnectionString = "Password=!31497Oo;User ID=dbdev;Initial Catalog=puzzlepush;Integrated Security=True;Trusted_Connection=No;Data Source=ics-c28-02.cloudapp.net";
                 SqlConnection objConn = new SqlConnection(ConnectionString);
 
                 //run an sql query and create a dataset to store the result
@@ -93,7 +93,7 @@ namespace puzzlepush
                 objConn.Open();
                 MyAdapter.Fill(ds, "ra");
                 dt = ds.Tables["ra"];
-                objConn.Close();
+                //objConn.Close();
             }
 
             catch (Exception ex)
