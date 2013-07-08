@@ -22,39 +22,62 @@ namespace puzzlepush
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
-
-            string json = JsonConvert.SerializeObject(ds);
-            Response.Write(json);
+            string json;
+            try
+            {
+                json = getarray();
+                Response.Write(json);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
-
+            
         [WebMethod]
         public static string getarray()
         {
-            //connect and use arrayer, return as JSON
-            connect();
+            string json;
+            try
+            {
+                //connect and use arrayer, return as JSON
+                connect();
 
-            string json = JsonConvert.SerializeObject(arrayer());
+                 json = JsonConvert.SerializeObject(arrayer());
+                
+            }
+            catch (Exception ex)
+            {
+                 json = JsonConvert.SerializeObject("getarray"+ex.Message);
+            }
+
             return json;
         }
 
         public static Array arrayer()
         {
-            //makes a 2D array and adds each element from the DataTable list to it
             string[,] myarray = new string[5, 5];
             List<String> names = makelist();
-            List<String> namestest = new List<String>() {"A","B","C","D","E" };
-            
-            for (int i = 0; i < 5; i++)
+            List<String> namestest = new List<String>() { "A", "B", "C", "D", "E" };
+            try
             {
-                for (int j = 0; j < 5; j++)
-                {
-                    String n = names[randomnumber()];
-                    //String n = namestest[randomnumber()];
-                    myarray[i, j] = n;
-                };
-            }
+                //makes a 2D array and adds each element from the DataTable list to it
+               
 
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        String n = names[randomnumber()];
+                        //String n = namestest[randomnumber()];
+                        myarray[i, j] = n;
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("arrayer" + ex.Message);
+            }
             return myarray;
         }
 
@@ -64,7 +87,7 @@ namespace puzzlepush
             List<String> stringlist = new List<String>();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                string s = (string)dt.Rows[i]["image_name"];
+                string s = (string)dt.Rows[i]["img_name"];
                 stringlist.Add(s);
                 
             }
@@ -86,7 +109,7 @@ namespace puzzlepush
                 SqlConnection objConn = new SqlConnection(ConnectionString);
 
                 //run an sql query and create a dataset to store the result
-                SqlDataAdapter MyAdapter = new SqlDataAdapter("select image_name from images", objConn);
+                SqlDataAdapter MyAdapter = new SqlDataAdapter("select img_name from images", objConn);
 
                 //open the connection to the database
                 //fill the dataset with the results from the sql query and name the table 'hw'
