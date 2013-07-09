@@ -71,7 +71,13 @@
     <Content Include="Account\ChangePasswordSuccess.aspx" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Register.aspx" />
+    <Content Include="default.html" />
+    <Content Include="helloworld1.html" />
     <Content Include="hw.aspx" />
+    <Content Include="randomarray.aspx" />
+    <Content Include="Scripts\servicecalls.js" />
+    <Content Include="Scripts\test.js" />
+    <Content Include="play.aspx" />
     <Content Include="Styles\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
@@ -140,12 +146,26 @@
       <DependentUpon>hw.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="randomarray.aspx.cs">
+      <DependentUpon>randomarray.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="randomarray.aspx.designer.cs">
+      <DependentUpon>randomarray.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="play.aspx.cs">
+      <DependentUpon>play.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="play.aspx.designer.cs">
+      <DependentUpon>play.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
