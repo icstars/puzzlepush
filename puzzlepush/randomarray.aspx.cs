@@ -15,8 +15,7 @@ namespace puzzlepush
     public partial class randomarray : System.Web.UI.Page
     {
         static Random number = new Random();
-        static DataSet ds = new DataSet();
-        static DataTable dt = new DataTable();
+        static SqlConnection conn;
 
 
 
@@ -41,7 +40,7 @@ namespace puzzlepush
             try
             {
                 //connect and use arrayer, return as JSON
-                connect();
+                //connect();
 
                  json = JsonConvert.SerializeObject(arrayer());
                 
@@ -58,7 +57,6 @@ namespace puzzlepush
         {
             string[,] myarray = new string[5, 5];
             List<String> names = makelist();
-            List<String> namestest = new List<String>() { "A", "B", "C", "D", "E" };
             try
             {
                 //makes a 2D array and adds each element from the DataTable list to it
@@ -85,6 +83,7 @@ namespace puzzlepush
         {
             //takes the DataTable and casts it to a String list
             List<String> stringlist = new List<String>();
+            DataTable dt = getimagenames();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 string s = (string)dt.Rows[i]["img_name"];
@@ -101,21 +100,34 @@ namespace puzzlepush
             return rn;
         }
 
+        public static DataTable getimagenames()
+        {
+            DataSet ds = new DataSet();
+            DataTable dt = new DataTable();
+            connect();
+
+            SqlDataAdapter Adapterimgnames = new SqlDataAdapter("select img_name from images", conn);
+            Adapterimgnames.Fill(ds, "imgnames");
+            dt = ds.Tables["imgnames"];
+
+            return dt;
+
+        }
         public static void connect()
         {
             try
             {
                 string ConnectionString = "Password=!31497Oo;User ID=dbdev;Initial Catalog=puzzlepush;Integrated Security=True;Trusted_Connection=No;Data Source=ics-c28-02.cloudapp.net";
-                SqlConnection objConn = new SqlConnection(ConnectionString);
+                conn = new SqlConnection(ConnectionString);
 
                 //run an sql query and create a dataset to store the result
-                SqlDataAdapter MyAdapter = new SqlDataAdapter("select img_name from images", objConn);
+                //SqlDataAdapter MyAdapter = new SqlDataAdapter("select img_name from images", conn);
 
                 //open the connection to the database
                 //fill the dataset with the results from the sql query and name the table 'hw'
-                objConn.Open();
-                MyAdapter.Fill(ds, "ra");
-                dt = ds.Tables["ra"];
+                conn.Open();
+                //MyAdapter.Fill(ds, "ra");
+                //dt = ds.Tables["ra"];
                 //objConn.Close();
             }
 
