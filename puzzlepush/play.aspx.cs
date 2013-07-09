@@ -25,7 +25,7 @@ namespace puzzlepush
             try
             {
                 //Response.Write(recordstart("2013-06-30"));
-                //Response.Write(gettrivia());
+                Response.Write(gettrivia());
                 //json = getarray();
                 //Response.Write(json);
                 //Response.Write(getjson());
@@ -61,7 +61,7 @@ namespace puzzlepush
                 insertname.Parameters.Add(parmdate);
                 // run the stored procedure, which updates the database with user start time and IP
                 insertname.ExecuteNonQuery();
-                
+                conn.Close();
             }
 
             catch (Exception ex)
@@ -100,7 +100,7 @@ namespace puzzlepush
             {
                 connect("puzzlepush");
                 //gets a piece of trivia from the database returns it as a JSON string
-                da = new SqlDataAdapter("select tip from trivia where id = 1", conn);
+                da = new SqlDataAdapter("selecttriviatip", conn);
                 da.Fill(ds, "trivia");
 
                 json = JsonConvert.SerializeObject(ds);
