@@ -29,11 +29,11 @@ namespace puzzlepush
             string json;
             try
             {
-                ConnectionString = "Password=!31497Oo;User ID=dbdev;Initial Catalog=hw;Integrated Security=True;Trusted_Connection=No;Data Source=ics-c28-02.cloudapp.net";
+                ConnectionString = "Password=!31497Oo;User ID=dbdev;Initial Catalog=HW;Integrated Security=True;Trusted_Connection=No;Data Source=ics-c28-02.cloudapp.net";
                 SqlConnection objConn = new SqlConnection(ConnectionString);
 
                 //run an sql query and create a dataset to store the result
-                SqlDataAdapter MyAdapter = new SqlDataAdapter("getUserNameById'1'", objConn);
+                SqlDataAdapter MyAdapter = new SqlDataAdapter("selecthelloworldbyid'1'", objConn);
                 DataSet ds = new DataSet();
                 //open the connection to the database
                 //fill the dataset with the results from the sql query and name the table 'hw'

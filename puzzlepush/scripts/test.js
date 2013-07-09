@@ -1,4 +1,4 @@
-function displayMessageCall(){
+function gethw(){
 
     $.ajax({
         type: "POST",
@@ -8,7 +8,11 @@ function displayMessageCall(){
         dataType: "json",
         success: function(msg){
        // $("#HelloWorldString").text(msg.d);
-        alert(msg);
+            var obj = JSON.parse(msg.d);
+            console.log(obj.hw);
+            console.log(obj.hw[0]);
+            console.log(obj.hw[1]);
+            displayhw(obj.hw[0]);
         }
     });
  
