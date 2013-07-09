@@ -75,6 +75,8 @@
     <Content Include="hw.aspx" />
     <Content Include="randomarray.aspx" />
     <Content Include="Scripts\test.js" />
+    <Content Include="sp1.aspx" />
+    <Content Include="splashpage.aspx" />
     <Content Include="Styles\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
@@ -156,6 +158,20 @@
     </Compile>
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="sp1.aspx.cs">
+      <DependentUpon>sp1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="sp1.aspx.designer.cs">
+      <DependentUpon>sp1.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="splashpage.aspx.cs">
+      <DependentUpon>splashpage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="splashpage.aspx.designer.cs">
+      <DependentUpon>splashpage.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
