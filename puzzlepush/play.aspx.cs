@@ -12,19 +12,19 @@ using Newtonsoft.Json;
 
 namespace puzzlepush
 {
-    public partial class splashpage : System.Web.UI.Page
+    public partial class play : System.Web.UI.Page
     {
 
         static SqlCommand insertname;
-
+        static SqlConnection conn;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             
             try
             {
-                Response.Write(recordstart("2013-06-30"));
-                
+                //Response.Write(recordstart("2013-06-30"));
+                Response.Write(gettrivia());
             }
             catch (Exception ex)
             {
@@ -40,14 +40,10 @@ namespace puzzlepush
             string json;
             try
             {
-                string ConnectionString = "Password=!31497Oo;User ID=dbdev;Initial Catalog=puzzlepush;Integrated Security=True;Trusted_Connection=No;Data Source=ics-c28-02.cloudapp.net";
-                SqlConnection objConn = new SqlConnection(ConnectionString);
-
-                //open the connection to the database
-                objConn.Open();
+                connect();
 
                 string inser = "addip";
-                insertname = new SqlCommand(inser, objConn);
+                insertname = new SqlCommand(inser, conn);
                 insertname.CommandType = CommandType.StoredProcedure;
 
                 string sip = HttpContext.Current.Request.UserHostAddress;
@@ -57,7 +53,7 @@ namespace puzzlepush
                 SqlParameter parmip = new SqlParameter("@ip", sip);
                 insertname.Parameters.Add(parmip);
                 insertname.Parameters.Add(parmdate);
-                insertname.ExecuteNonQuery();
+                //insertname.ExecuteNonQuery();
                 
             }
 
@@ -67,6 +63,39 @@ namespace puzzlepush
                 json = JsonConvert.SerializeObject(ex);
 
             }
+            return json;
+        }
+
+        public static void connect()
+        {
+            string ConnectionString = "Password=!31497Oo;User ID=dbdev;Initial Catalog=puzzlepush;Integrated Security=True;Trusted_Connection=No;Data Source=ics-c28-02.cloudapp.net";
+            conn = new SqlConnection(ConnectionString);
+
+            //open the connection to the database
+            conn.Open();
+        }
+
+        [WebMethod]
+        public static string gettrivia()
+        {
+            string json;
+            DataSet ds = new DataSet();
+            SqlDataAdapter da;
+
+            try
+            {
+                connect();
+                da = new SqlDataAdapter("select * from trivia where id = 1", conn);
+                da.Fill(ds, "trivia");
+
+                json = JsonConvert.SerializeObject(ds);
+
+            }
+            catch (Exception ex)
+            {
+                json = JsonConvert.SerializeObject(ex);
+            }
+
             return json;
         }
     }

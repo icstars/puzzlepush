@@ -10,7 +10,7 @@
 namespace puzzlepush {
     
     
-    public partial class sp1 {
+    public partial class play {
         
         /// <summary>
         /// form1 control.
