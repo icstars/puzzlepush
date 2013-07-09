@@ -23,7 +23,7 @@ namespace puzzlepush
             
             try
             {
-                Response.Write(todatabase("2013-06-30"));
+                Response.Write(recordstart("2013-06-30"));
                 
             }
             catch (Exception ex)
@@ -35,36 +35,35 @@ namespace puzzlepush
 
 
         [WebMethod]
-        public static string todatabase(string datestring)
+        public static string recordstart(string datestring)
         {
             string json;
             try
             {
                 string ConnectionString = "Password=!31497Oo;User ID=dbdev;Initial Catalog=puzzlepush;Integrated Security=True;Trusted_Connection=No;Data Source=ics-c28-02.cloudapp.net";
                 SqlConnection objConn = new SqlConnection(ConnectionString);
-                
-                
+
                 //open the connection to the database
                 objConn.Open();
-                string inser = "insertimagesbyname";
-                //string inser = "insertimages";
+
+                string inser = "addip";
                 insertname = new SqlCommand(inser, objConn);
-               
+                insertname.CommandType = CommandType.StoredProcedure;
+
                 string sip = HttpContext.Current.Request.UserHostAddress;
                 json = JsonConvert.SerializeObject(sip);
 
-                SqlParameter parmdate = new SqlParameter("date",datestring);
-                SqlParameter parmip = new SqlParameter("ip", sip);
-                insertname.Parameters.Add(parmdate);
+                SqlParameter parmdate = new SqlParameter("@startdate",datestring);
+                SqlParameter parmip = new SqlParameter("@ip", sip);
                 insertname.Parameters.Add(parmip);
-                //insertname.ExecuteNonQuery();
+                insertname.Parameters.Add(parmdate);
+                insertname.ExecuteNonQuery();
                 
             }
 
             catch (Exception ex)
             {
                 //write any error messages
-                Console.WriteLine(ex.Message);
                 json = JsonConvert.SerializeObject(ex);
 
             }

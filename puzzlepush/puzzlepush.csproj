@@ -71,12 +71,13 @@
     <Content Include="Account\ChangePasswordSuccess.aspx" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Register.aspx" />
+    <Content Include="default.html" />
     <Content Include="helloworld1.html" />
     <Content Include="hw.aspx" />
     <Content Include="randomarray.aspx" />
+    <Content Include="Scripts\servicecalls.js" />
     <Content Include="Scripts\test.js" />
-    <Content Include="sp1.aspx" />
-    <Content Include="splashpage.aspx" />
+    <Content Include="play.aspx" />
     <Content Include="Styles\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
@@ -159,19 +160,12 @@
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
-    <Compile Include="sp1.aspx.cs">
-      <DependentUpon>sp1.aspx</DependentUpon>
+    <Compile Include="play.aspx.cs">
+      <DependentUpon>play.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="sp1.aspx.designer.cs">
-      <DependentUpon>sp1.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="splashpage.aspx.cs">
-      <DependentUpon>splashpage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="splashpage.aspx.designer.cs">
-      <DependentUpon>splashpage.aspx</DependentUpon>
+    <Compile Include="play.aspx.designer.cs">
+      <DependentUpon>play.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="splashpage.aspx.cs" Inherits="puzzlepush.splashpage" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="play.aspx.cs" Inherits="puzzlepush.splashpage" %>
 
 <!DOCTYPE html>
 
