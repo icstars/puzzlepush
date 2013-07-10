@@ -25,7 +25,7 @@ namespace puzzlepush
             try
             {
                 //Response.Write(recordstart("2013-06-30"));
-                Response.Write(gettrivia());
+                //Response.Write(gettrivia());
                 //json = getarray();
                 //Response.Write(json);
                 //Response.Write(getjson());

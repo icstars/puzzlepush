@@ -2,7 +2,7 @@
    function getplaygame(){
 	var thedate = new Date();
 	$.ajax({
-	    type: "Post",
+	    type: "POST",
 	    url: "play.aspx/recordstart",
 	    data: { date: thedate },
 	    contentType: "application/json",
