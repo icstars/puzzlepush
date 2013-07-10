@@ -9,7 +9,8 @@
 		
 	}
 	//calling getplaygame from jquery and passing her the date
-	function startplaygame(){
-		var d = getdate();
-		getplaygame (d)
+	function getplaygame(){
+		var thedate = getdate();
+		getplaygame (thedate)
 	}
+	
