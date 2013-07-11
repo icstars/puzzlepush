@@ -73,6 +73,14 @@ namespace puzzlepush
             return json;
         }
 
+        [WebMethod]
+        public static string datetest(string datestring)
+        {
+            string json;
+            //json = JsonConvert.SerializeObject(datestring);
+            return datestring;
+        }
+
         public static void connect(string db)
         {
             try
@@ -237,5 +245,6 @@ namespace puzzlepush
 
 
         }
+
     }
 }

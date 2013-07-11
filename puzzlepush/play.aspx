@@ -7,9 +7,29 @@
     <title></title>
 </head>
 <body>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script>
+
+        function getplaygame() {
+            var thedate = new Date();
+            console.log(thedate);
+            $.ajax({
+                type: "POST",
+                url: "play.aspx/recordstart",
+                data: { date: thedate },
+                contentType: "application/json",
+                success: function (msg) {
+                    console.log(msg.d);
+                }
+            });
+        }
+
+    </script>
    <form id="form1" runat="server">
     <div>
     
+        <button onclick="getplaygame()">Go</button>
+
     </div>
     </form>
 </body>

@@ -4,14 +4,28 @@
 	$.ajax({
 	    type: "POST",
 	    url: "play.aspx/recordstart",
-	    data: { date: thedate },
+	    data: JSON.stringify({datestring: thedate }),
 	    contentType: "application/json",
 	    success: function (msg) {
 	        console.log(msg.d);
 	    }
 	});
 }
-
+   function postdate() {
+       var thedate = new Date();
+       //var thedata = '{ "datestring":"' + thedate + '" }';
+       //console.log(thedata);
+       $.ajax({
+           type: "POST",
+           url: "play.aspx/datetest",
+           data: JSON.stringify({datestring:thedate}),
+           processData: false,
+           contentType: "application/json",
+           success: function (msg) {
+               console.log(msg.d);
+           }
+       });
+   }
 function postsafetytip(){
 	$.ajax({
 	   type:"POST", 
