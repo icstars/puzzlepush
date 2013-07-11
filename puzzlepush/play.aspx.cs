@@ -29,6 +29,9 @@ namespace puzzlepush
                 //json = getarray();
                 //Response.Write(json);
                 //Response.Write(getjson());
+                string[] board = new string[] {"image1", "image2", "image3", "image4", "image5", "image1", "image3", "image4" };
+                //savearray(board);
+                Response.Write(savearray(board));
             }
             catch (Exception ex)
             {
@@ -46,8 +49,8 @@ namespace puzzlepush
             {
                 connect("puzzlepush");
 
-                string inser = "addip";
-                SqlCommand insertname = new SqlCommand(inser, conn);
+                string insert = "addip";
+                SqlCommand insertname = new SqlCommand(insert, conn);
                 insertname.CommandType = CommandType.StoredProcedure;
                 
                 // gets the IP from the jQuery request
@@ -76,7 +79,7 @@ namespace puzzlepush
         [WebMethod]
         public static string datetest(string datestring)
         {
-            string json;
+            //string json;
             //json = JsonConvert.SerializeObject(datestring);
             return datestring;
         }
@@ -142,10 +145,71 @@ namespace puzzlepush
         }
 
         [WebMethod]
-        public static Array savearray(Array board array)
+        public static string savearray(Array boardarray)
         {
+            string json;
+            string insert ="addboard";
+            SqlCommand insertname = new SqlCommand(insert, conn);
+            insertname.CommandType = CommandType.StoredProcedure;
+            List<string> image1 = new List<string>();
+            List<string> image2 = new List<string>();
+            List<string> image3 = new List<string>();
+            List<string> image4 = new List<string>();
+            List<string> image5 = new List<string>();
+            try
+            {
+                connect("puzzlepush");
 
-            return 
+                foreach(string image in boardarray)
+                {
+                    if(image == "image1")
+                    {
+                        image1.Add(image);
+                    }
+                    if(image == "image2")
+                    {
+                        image2.Add(image);
+                    }
+                    if(image == "image3")
+                    {
+                        image3.Add(image);
+                    }
+                    if(image == "image4")
+                    {
+                        image4.Add(image);
+                    }
+                    if(image == "image5")
+                    {
+                        image5.Add(image);
+                    }
+                }
+
+                SqlParameter parm1 = new SqlParameter("@image1",image1);
+                SqlParameter parm2 = new SqlParameter("@image2",image2);
+                SqlParameter parm3 = new SqlParameter("@image3",image3);
+                SqlParameter parm4 = new SqlParameter("@image4",image4);
+                SqlParameter parm5 = new SqlParameter("@image5",image5);
+
+                insertname.Parameters.Add(parm1);
+                insertname.Parameters.Add(parm2);
+                insertname.Parameters.Add(parm3);
+                insertname.Parameters.Add(parm4);
+                insertname.Parameters.Add(parm5);
+
+                insertname.ExecuteNonQuery();
+                conn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                json = JsonConvert.SerializeObject(ex);
+                Console.WriteLine(json);
+            }
+
+            json = JsonConvert.SerializeObject(insertname);
+            return json;
+            
+            
         }
 
         public static Array arrayer()
