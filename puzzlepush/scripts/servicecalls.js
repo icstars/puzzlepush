@@ -10,6 +10,23 @@
 	        console.log(msg.d);
 	    }
 	});
+	
+	$.ajax({
+	  type:"POST", 
+          url: "play.aspx/recordstart",
+       	  data:"{}",
+      	  contentType: "application/json; charset=utf-8",
+       	  dataType: "json",
+       	  success: function(msg){
+       		var thesafety = json.parse(msg.d); 
+       		console.log(thesafety); 
+       		postsafetytip(thesafety); 
+       	 },
+         failure: function(err){
+       		console.log(err);
+       }
+	}); 	
+	
 }
    /*function postdate() {
        var thedate = new Date();
@@ -27,23 +44,5 @@
        });
    }*/
    
-function postsafetytip(){
-	$.ajax({
-	   type:"POST", 
-       url: "play.aspx/gettrivia",
-       data:"{}",
-       contentType: "application/json",
-       dataType: "json",
-       success: function(msg){
-       		var thesafety = json.parse(msg.d); 
-       		console.log(thesafety.play); 
-       		postsafetytip(thesafety.play); 
-       	 },
-       failure: function(err){
-       		console.log(err);
-       }
-	}); 
-
-}
 
 
