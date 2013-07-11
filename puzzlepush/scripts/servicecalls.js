@@ -1,5 +1,5 @@
  
-   function getplaygame(){
+   function postdate(){
 	var thedate = new Date();
 	$.ajax({
 	    type: "POST",
@@ -11,7 +11,7 @@
 	    }
 	});
 }
-   function postdate() {
+   /*function postdate() {
        var thedate = new Date();
        //var thedata = '{ "datestring":"' + thedate + '" }';
        //console.log(thedata);
@@ -25,7 +25,8 @@
                console.log(msg.d);
            }
        });
-   }
+   }*/
+   
 function postsafetytip(){
 	$.ajax({
 	   type:"POST", 
