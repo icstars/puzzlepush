@@ -1,0 +1,25 @@
+.image1 {
+	background-image: url(washmach42.png);
+	background-size: cover;
+	background-repeat:no-repeat;
+}
+.image2 {
+	background-image: url(fire22.png);
+	background-repeat:no-repeat;
+	background-size: cover;
+}
+.image3 {
+	background-image: url(plugs3.png);
+	background-repeat:no-repeat;
+	background-size: cover;
+}
+.image4 {
+	background-image: url(stove41.png);
+	background-repeat:no-repeat;
+	background-size: cover;
+}
+.image5 {
+	background-image: url(fridge43.png);
+	background-repeat:no-repeat;
+	background-size: cover;
+}

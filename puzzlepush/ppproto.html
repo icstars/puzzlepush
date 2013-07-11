@@ -1,0 +1,339 @@
+<!DOCTYPE>
+<html>
+<title>Puzzle Push</title>
+<head>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="puzzlepush.css">
+<style>
+
+</style>
+</head>
+<body>
+</body>
+<script>
+
+$(document).ready(function(){
+	$("body").append('<div id= "gamefield"></div><div id= "handbar"></div><div id= "tilebox"></div><div id= "marker"></div>');
+	$("body").append('<div id= "image1"></div><div id= "image2"></div><div id= "image2"></div><div id= "image3"></div><div id= "image4"></div><div id= "image5"></div>')	
+
+		$("#marker").css({"width":"300px","height":"42px","border":"5px solid yellow","position":"absolute"}).hide();
+		$("#gamefield").css({"top":"40px","left":"60px","margin":"auto","position":"absolute"});
+		$("#handbar").css({"width":"300px","height": "63px","position": "relative","border": "2px solid green","top": "350px","left": "57px"});
+		$("#tilebox").css({"width":"300px","height": "125px","position": "relative","border": "2px solid green","top": "365px","left": "57px"});
+	var selectedRow=-1;
+	var selectedCol=-1;
+	var posX;
+	var posY;
+	var gameState="pick";
+	var tiles = new Array();
+	var movingItems = 0;
+	var imgTiles = new Array("image1","image2","image3","image4","image5");
+	for(i=0;i<5;i++){
+		tiles[i]=new Array();
+		for(j=0;j<5;j++){
+			tiles[i][j]=-1;
+		}
+	  }
+	 for(i=0;i<5;i++){
+	 	for(j=0;j<5;j++){
+	 		do{
+	 			tiles[i][j]=Math.floor(Math.random()*5);
+	 		}while(isStreak(i,j))
+	 		$("#gamefield").append('<div class = "tile" id = "tile_'+i+'_'+j+'"></div>');
+	 		$("#tile_"+i+"_"+j).addClass(imgTiles[tiles[i][j]]);
+	 		$("#tile_"+i+"_"+j).css({"top":(i*60)+10+"px","left":(j*60)+10+"px","width":"50px","height":"50px","position":"absolute","border":"1px solid black","cursor":"pointer","background-image":imgTiles[tiles[i][j]]});
+	 	}
+	 	for(k=0;k<2;k++){
+	 		for(a=0;a<5;a++){
+		 		do{
+		 			tiles[k][a]=Math.floor(Math.random()*5);
+		 		}while(isStreak(k,a))
+		 		$("#tilebox").append('<div class = "htile" id = "htile_'+k+'_'+a+'"></div>');
+		 		$("#htile_"+k+"_"+a).addClass(imgTiles[tiles[k][a]]);
+		 		$("#htile_"+k+"_"+a).css({"top":(k*60)+10+"px","left":(a*60)+10+"px","width":"50px","height":"50px","position":"absolute","border":"1px solid black","cursor":"pointer","background-image":imgTiles[tiles[k][a]]});
+	 		}
+	 	}
+	 }
+	 $(".htile" ).draggable({
+	tolerance:'fit',
+});
+
+$(".htile" ).draggable({
+	revert:'invalid',
+	stop:function(){
+		$(this).draggable('option','revert','invalid');
+	}
+});
+$('.htile').droppable({
+    greedy: true,
+    tolerance: 'touch',
+    drop: function(event,ui){
+        ui.draggable.draggable('option','revert',true);
+		
+    }
+});
+
+$('#handbar').droppable({
+    drop: function(event, ui) {
+         
+         ui.draggable.draggable("option",this);
+    }
+});$('#tilebox').droppable({
+    drop: function(event, ui) {
+         
+         ui.draggable.draggable("option",this);
+    }
+});
+
+	 $(".tile").on("click",function(){
+	 	if(gameState=="pick"){
+	 		posY=$(this).position().top;
+	 		posX=$(this).position().left;
+	 		$("#marker").show();
+	 		$("#marker").css("top",posY-5).css("left",posX-5);
+	 		if(selectedRow==-1){
+	 			selectedRow=(posY-10)/60;
+	 			selectedCol=(posX-10)/60;
+	 		}
+	 		else{
+	 			posY=(posY-10)/60;
+	 			posX=(posX-10)/60;
+	 			if((Math.abs(selectedRow-posY)==1 && selectedCol==posX)||(
+	 				Math.abs(selectedCol-posX)==1 && selectedRow==posY)){
+	 				$("#marker").hide();
+	 			gameState="switch";
+	 			tileSwitch();
+	 			}
+	 			else{
+	 				selectedRow=posY;
+	 				selectedCol=posX;
+	 			}
+	 		}
+	 	}
+	 });
+
+	 function checkMoving(){
+	 	movingItems--;
+	 		if(movingItems==0){
+	 			switch(gameState){
+	 				case"revert":
+	 				case"switch":
+	 					if(!isStreak(selectedRow,selectedCol) && !
+	 						isStreak(posY,posX)){
+	 					 if(gameState!="revert"){
+	 					 	gameState="revert";
+	 					 		tileSwitch();
+	 					 }
+	 					 else{
+	 					 	gameState="pick";
+	 					 	selectedRow=-1;
+	 					}
+	 					}
+	 				else{
+	 					gameState="remove";
+	 						if(isStreak(selectedRow,selectedCol)){
+	 							removeTiles(selectedRow,selectedCol);
+	 					}
+	 						if(isStreak(posY,posX)){
+	 							removeTiles(posY,posX);
+	 					}
+	 					tileFade();
+	 				}
+	 				break;
+	 			case "remove":
+	 				checkFalling();
+	 				break;
+	 			case "refill":
+	 				placeNewTiles();
+	 				break;
+	 			}
+	 		}
+	 }
+		
+	  function placeNewTiles(){
+        var tilesPlaced = 0;
+        for(i=0;i<5;i++){
+            if(tiles[0][i]==-1){
+                tiles[0][i]=Math.floor(Math.random()*5);
+                  $("#gamefield").append('<div class = "tile" id = "tile_0_'+i+'"></div>');
+                  $("#tile_0_"+i).css({"top":"10px","left":(i*60)+10+"px","width":"50px","height":"50px","position":"absolute","border":"1px solid white","cursor":"pointer","background-color":imgTiles[tiles[0][i]]});
+                  tilesPlaced++;
+            }
+        }
+        if(tilesPlaced){
+            gameState="remove";
+            checkFalling();
+        }
+        else{
+            var combo=0
+            for(i=0;i<5;i++){
+                  for(j=0;j<5;j++){
+                      if(j<=5 && tiles[i][j]==tiles[i][j+1] && tiles[i][j]==tiles[i][j+1]){
+                        combo++;
+                        removeTiles(i,j);     
+                    }
+                    if(i<=5 && tiles[i][j]==tiles[i+1][j] && tiles[i][j]==tiles[i+1][j]){
+                        combo++;
+                        removeTiles(i,j);     
+                    }             
+                }
+            }
+            if(combo>0){
+                gameState="remove";
+                tileFade();
+            }        
+            else{
+                gameState="pick";
+                selectedRow=-1;
+            }
+        }
+    }
+    
+    function checkFalling(){
+        var fellDown=0;
+        for(j=0;j<5;j++){
+            for(i=4;i>0;i--){
+                if(tiles[i][j]==-1 && tiles[i-1][j]>=0){
+                    $("#tile_"+(i-1)+"_"+j).addClass("fall").attr("id","tile_"+i+"_"+j);
+                    tiles[i][j]=tiles[i-1][j];
+                    tiles[i-1][j]=-1;
+                    fellDown++;
+                }
+            }
+        }
+        $.each($(".fall"),function(){
+            movingItems++;
+            $(this).animate({
+                top: "+=60"
+                },{
+                duration: 50,
+                complete: function(){
+                    $(this).removeClass("fall");
+                    checkMoving();
+                }
+            });
+        });     
+        if(fellDown==0){
+            gameState="refill";
+            movingItems=1;
+            checkMoving();    
+        }    
+    }
+    
+    function tileFade(){
+        $.each($(".remove"),function(){
+            movingItems++;
+            $(this).animate({
+                opacity:0
+                },{
+                duration: 1,
+                complete: function(){
+                    $(this).remove();
+                    checkMoving();
+                }
+            });
+        });
+    }
+ 
+    function tileSwitch(){
+        var yOffset=selectedRow-posY;
+        var xOffset=selectedCol-posX;
+        $("#tile_"+selectedRow+"_"+selectedCol).addClass("switch").attr("dir","-1");
+        $("#tile_"+posY+"_"+posX).addClass("switch").attr("dir","1");
+        $.each($(".switch"),function(){
+            movingItems++;
+            $(this).animate({
+                left: "+="+xOffset*60*$(this).attr("dir"),
+                top: "+="+yOffset*60*$(this).attr("dir")
+                },{
+                duration: 500,
+                complete: function(){
+                    checkMoving();
+                }
+            }).removeClass("switch")
+        });
+        $("#tile_"+selectedRow+"_"+selectedCol).attr("id","temp");
+        $("#tile_"+posY+"_"+posX).attr("id","tile_"+selectedRow+"_"+selectedCol);
+        $("#temp").attr("id","tile_"+posY+"_"+posX);
+        var temp=tiles[selectedRow][selectedCol];
+        tiles[selectedRow][selectedCol]=tiles[posY][posX];
+        tiles[posY][posX]=temp;
+    }
+    
+    function removeTiles(row,col){
+        var tileValue = tiles[row][col];
+        var tmp = row;
+        $("#tile_"+row+"_"+col).addClass("remove");
+        if(isVerticalStreak(row,col)){
+            while(tmp>0 && tiles[tmp-1][col]==tileValue){                          
+                $("#tile_"+(tmp-1)+"_"+col).addClass("remove");
+                tiles[tmp-1][col]=-1;
+                tmp--;
+            }
+            tmp=row;
+            while(tmp<4 && tiles[tmp+1][col]==tileValue){
+                $("#tile_"+(tmp+1)+"_"+col).addClass("remove");
+                tiles[tmp+1][col]=-1;
+                tmp++;
+            }
+        }
+        if(isHorizontalStreak(row,col)){
+            tmp = col;
+            while(tmp>0 && tiles[row][tmp-1]==tileValue){
+                $("#tile_"+row+"_"+(tmp-1)).addClass("remove");
+                tiles[row][tmp-1]=-1;
+                tmp--;
+            }
+            tmp=col;
+            while(tmp<4 && tiles[row][tmp+1]==tileValue){
+                $("#tile_"+row+"_"+(tmp+1)).addClass("remove");
+                tiles[row][tmp+1]=-1;
+                tmp++;
+            }
+        }
+        tiles[row][col]=-1;
+    }
+
+
+	     function isVerticalStreak(row,col){
+        var tileValue=tiles[row][col];
+        var streak=0;
+        var tmp=row;
+        while(tmp>0 && tiles[tmp-1][col]==tileValue){
+            streak++;
+            tmp--;
+        }
+        tmp=row;
+        while(tmp<4 && tiles[tmp+1][col]==tileValue){
+            streak++;
+            tmp++;
+        }
+        return streak>1
+    }
+    
+    function isHorizontalStreak(row,col){
+        var tileValue=tiles[row][col];
+        var streak=0;
+        var tmp=col
+        while(tmp>0 && tiles[row][tmp-1]==tileValue){
+            streak++;
+            tmp--;
+        }
+        tmp=col;
+        while(tmp<4 && tiles[row][tmp+1]==tileValue){
+            streak++;
+            tmp++;
+        }
+        return streak>1
+    }
+
+
+	  function isStreak(row,col){
+        return isVerticalStreak(row,col)||isHorizontalStreak(row,col);
+    }                  
+
+
+});
+</script>
+</html>
