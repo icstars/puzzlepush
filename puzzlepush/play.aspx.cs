@@ -15,7 +15,7 @@ namespace puzzlepush
     public partial class play : System.Web.UI.Page
     {
         static Random number = new Random();
-        static SqlCommand insertname;
+        
         static SqlConnection conn;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -47,7 +47,7 @@ namespace puzzlepush
                 connect("puzzlepush");
 
                 string inser = "addip";
-                insertname = new SqlCommand(inser, conn);
+                SqlCommand insertname = new SqlCommand(inser, conn);
                 insertname.CommandType = CommandType.StoredProcedure;
                 
                 // gets the IP from the jQuery request
@@ -68,9 +68,9 @@ namespace puzzlepush
             {
                 //write any error messages
                 json = JsonConvert.SerializeObject(ex);
-                Console.Write("recordstart" + ex.Message);
+                Console.WriteLine("recordstart" + ex.Message);
             }
-            return json;
+            return gettrivia();
         }
 
         [WebMethod]
@@ -117,7 +117,7 @@ namespace puzzlepush
             catch (Exception ex)
             {
                 json = JsonConvert.SerializeObject(ex);
-                Console.Write("gettrivia"+ex.Message);
+                Console.WriteLine("gettrivia"+ex.Message);
             }
 
             return json;
@@ -135,9 +135,17 @@ namespace puzzlepush
             catch (Exception ex)
             {
                 json = JsonConvert.SerializeObject("getarray" + ex.Message);
+                Console.WriteLine(json);
             }
 
             return json;
+        }
+
+        [WebMethod]
+        public static Array savearray(Array board array)
+        {
+
+            return 
         }
 
         public static Array arrayer()
@@ -181,7 +189,7 @@ namespace puzzlepush
             }
             catch (Exception ex)
             {
-                Console.Write(ex.Message);
+                Console.WriteLine(ex.Message);
             }
             return stringlist;
         }
@@ -208,7 +216,7 @@ namespace puzzlepush
             }
             catch (Exception ex)
             {
-                Console.Write(ex.Message);
+                Console.WriteLine(ex.Message);
             }
             return dt;
 
@@ -239,6 +247,7 @@ namespace puzzlepush
                 //write any error messages
                 //Console.Write(ex.Message);
                 json = JsonConvert.SerializeObject(ex);
+                Console.WriteLine(json);
             }
 
             return json;
