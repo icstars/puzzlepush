@@ -5,22 +5,39 @@
 <link rel = "stylesheet" href="styles/splash.css"/>
 <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 <script type="text/javascript" src="scripts/servicecalls.js"></script>
-<script type="text/javascript" src="scripts/splash.js">
-		
-
+<script type="text/javascript" src="scripts/splash.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>		
+<script>
+				$(document).ready(function(){
+					$(".start").click(function(){
+						//always start id with hash tags
+						$("#splashpage").fadeOut(3000);
+						});
+					});
+				
+				
+				
+</script>
 		
     
-	</script>
+	
 	</head>
 		<body width="auto">
-			
+				<div id = "splashpage">
 				<span class="imgpos">		
 	            <img src = "scripts/pp-button.png" style = "height: 200px; width: 200px;"/>	</span>
 			
 				<!--getplaygame is a service call from jquery-->
-				<button id ="start", onClick= "getplaygame()" style="background-color:red; color: white; font: bold 50px Comic Sans MS">Start</button>
+				
+				<button class ="start", onClick= "getplaygame()" style="background-color:red; color: white; font: bold 50px Helvetica">Start</button>
 				<button onclick="postdate()">postdate</button>
-			
-		
+				<button onclick = href="ppproto.html">gmaeboard</button>
+				</div>
+				
+				<div id > 
+				</div>
+			     
+				
+
 		</body>	
 </html>

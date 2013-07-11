@@ -9,4 +9,10 @@
 		
 	}
 	
+	function getsafetytip(){
+	   
+	}
+	
+	 
+	
 	
