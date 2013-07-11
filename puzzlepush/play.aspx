@@ -28,7 +28,7 @@
    <form id="form1" runat="server">
     <div>
     
-        <button onclick="getplaygame()">Go</button>
+       
 
     </div>
     </form>
