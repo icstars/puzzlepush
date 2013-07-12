@@ -4,10 +4,7 @@
 <head>
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-<<<<<<< HEAD
-=======
-<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
->>>>>>> prototype
+
 <link rel="stylesheet" type="text/css" href="puzzlepush.css">
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
 <style>
@@ -17,7 +14,105 @@
 <body>
 </body>
 <script>
+(function ($) {
+    // Detect touch support
+    $.support.touch = 'ontouchend' in document;
+    // Ignore browsers without touch support
+    if (!$.support.touch) {
+    return;
+    }
+    var mouseProto = $.ui.mouse.prototype,
+        _mouseInit = mouseProto._mouseInit,
+        touchHandled;
 
+    function simulateMouseEvent (event, simulatedType) { //use this function to simulate mouse event
+    // Ignore multi-touch events
+        if (event.originalEvent.touches.length > 1) {
+        return;
+        }
+    event.preventDefault(); //use this to prevent scrolling during ui use
+
+    var touch = event.originalEvent.changedTouches[0],
+        simulatedEvent = document.createEvent('MouseEvents');
+    // Initialize the simulated mouse event using the touch event's coordinates
+    simulatedEvent.initMouseEvent(
+        simulatedType,    // type
+        true,             // bubbles                    
+        true,             // cancelable                 
+        window,           // view                       
+        1,                // detail                     
+        touch.screenX,    // screenX                    
+        touch.screenY,    // screenY                    
+        touch.clientX,    // clientX                    
+        touch.clientY,    // clientY                    
+        false,            // ctrlKey                    
+        false,            // altKey                     
+        false,            // shiftKey                   
+        false,            // metaKey                    
+        0,                // button                     
+        null              // relatedTarget              
+        );
+
+    // Dispatch the simulated event to the target element
+    event.target.dispatchEvent(simulatedEvent);
+    }
+    mouseProto._touchStart = function (event) {
+    var self = this;
+    // Ignore the event if another widget is already being handled
+    if (touchHandled || !self._mouseCapture(event.originalEvent.changedTouches[0])) {
+        return;
+        }
+    // Set the flag to prevent other widgets from inheriting the touch event
+    touchHandled = true;
+    // Track movement to determine if interaction was a click
+    self._touchMoved = false;
+    // Simulate the mouseover event
+    simulateMouseEvent(event, 'mouseover');
+    // Simulate the mousemove event
+    simulateMouseEvent(event, 'mousemove');
+    // Simulate the mousedown event
+    simulateMouseEvent(event, 'mousedown');
+    };
+
+    mouseProto._touchMove = function (event) {
+    // Ignore event if not handled
+    if (!touchHandled) {
+        return;
+        }
+    // Interaction was not a click
+    this._touchMoved = true;
+    // Simulate the mousemove event
+    simulateMouseEvent(event, 'mousemove');
+    };
+    mouseProto._touchEnd = function (event) {
+    // Ignore event if not handled
+    if (!touchHandled) {
+        return;
+    }
+    // Simulate the mouseup event
+    simulateMouseEvent(event, 'mouseup');
+    // Simulate the mouseout event
+    simulateMouseEvent(event, 'mouseout');
+    // If the touch interaction did not move, it should trigger a click
+    if (!this._touchMoved) {
+      // Simulate the click event
+      simulateMouseEvent(event, 'click');
+    }
+    // Unset the flag to allow other widgets to inherit the touch event
+    touchHandled = false;
+    };
+    mouseProto._mouseInit = function () {
+    var self = this;
+    // Delegate the touch handlers to the widget's element
+    self.element
+        .on('touchstart', $.proxy(self, '_touchStart'))
+        .on('touchmove', $.proxy(self, '_touchMove'))
+        .on('touchend', $.proxy(self, '_touchEnd'));
+
+    // Call the original $.ui.mouse init method
+    _mouseInit.call(self);
+    };
+})(jQuery);
 $(document).ready(function(){
 	$("body").append('<div id= "gamefield"></div><div id= "handbar"></div><div id= "tilebox"></div><div id= "marker"></div>');
 	$("body").append('<div id= "image1"></div><div id= "image2"></div><div id= "image2"></div><div id= "image3"></div><div id= "image4"></div><div id= "image5"></div>')	
@@ -60,98 +155,11 @@ $(document).ready(function(){
 	 		}
 	 	}
 	 }
-<<<<<<< HEAD
-=======
-	 function touchHandler(event)
-{
-    var touches = event.changedTouches,
-        first = touches[0],
-        type = "";
-
-         switch(event.type)
-    {
-        case "touchstart": type = "mousedown"; break;
-        case "touchmove":  type="mousemove"; break;        
-        case "touchend":   type="mouseup"; break;
-        default: return;
-    }
-
-    // initMouseEvent(type, canBubble, cancelable, view, clickCount,
-    //                screenX, screenY, clientX, clientY, ctrlKey,
-    //                altKey, shiftKey, metaKey, button, relatedTarget);
-
-    var simulatedEvent = document.createEvent("MouseEvent");
-    simulatedEvent.initMouseEvent(type, true, true, window, 1,
-                              first.screenX, first.screenY,
-                              first.clientX, first.clientY, false,
-                              false, false, false, 0/*left*/, null);
-
-                                                                                 first.target.dispatchEvent(simulatedEvent);
-    event.preventDefault();
-}
-
-function init()
-{
-    document.addEventListener("touchstart", touchHandler, true);
-    document.addEventListener("touchmove", touchHandler, true);
-    document.addEventListener("touchend", touchHandler, true);
-    document.addEventListener("touchcancel", touchHandler, true);    
-}
->>>>>>> prototype
+	 
+	
 	 $(".htile" ).draggable({
 	tolerance:'fit',
 });
-/iPad|iPhone|Android/.test( navigator.userAgent ) && (function( $ ) { //phonegap function. This allows mobile users to perform touch events on their phones.
-
-var proto =  $.ui.mouse.prototype,
-_mouseInit = proto._mouseInit;
-
-$.extend( proto, {
-    _mouseInit: function() {
-        this.element
-        .bind( "touchstart." + this.widgetName, $.proxy( this, "_touchStart" ) );
-        _mouseInit.apply( this, arguments );
-    },
-
-    _touchStart: function( event ) {
-        /* if ( event.originalEvent.targetTouches.length != 1 ) {
-            return false;
-        } */
-
-        this.element
-        .bind( "touchmove." + this.widgetName, $.proxy( this, "_touchMove" ) )
-        .bind( "touchend." + this.widgetName, $.proxy( this, "_touchEnd" ) );
-
-        this._modifyEvent( event );
-
-        $( document ).trigger($.Event("mouseup")); //reset mouseHandled flag in ui.mouse
-        this._mouseDown( event );
-
-        //return false;           
-    },
-
-    _touchMove: function( event ) {
-        this._modifyEvent( event );
-        this._mouseMove( event );   
-    },
-
-    _touchEnd: function( event ) {
-        this.element
-        .unbind( "touchmove." + this.widgetName )
-        .unbind( "touchend." + this.widgetName );
-        this._mouseUp( event ); 
-    },
-
-    _modifyEvent: function( event ) {
-        event.which = 1;
-        var target = event.originalEvent.targetTouches[0];
-        event.pageX = target.clientX;
-        event.pageY = target.clientY;
-    }
-
-});
-
-})( jQuery );
 
 $(".htile" ).draggable({
 	revert:'invalid',
