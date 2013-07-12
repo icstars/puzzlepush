@@ -1,4 +1,4 @@
- 
+ /* ajax call which posts the date to the server */ 
    function postdate(){
 	var thedate = new Date();
 	$.ajax({
@@ -12,8 +12,9 @@
 	    }
 	});
    }
-	
-    function getsafetytip(){	
+
+/* ajax call which gets the trivia question from the server */ 
+      function getsafetytip(){	
 	$.ajax({
 	 	 type:"POST", 
           	url: "play.aspx/recordstart",
