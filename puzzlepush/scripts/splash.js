@@ -1,18 +1,16 @@
  //just getting safety tip   
+	
 	function triviapage (){
-	  	var trivia = postsafetytip()
+	  	var trivia = getsafetytip();
 		document.write (trivia);
 	}
+	 
+	 
 	//finished running this function
 	function getdate(){
 		 return new Date();
 		
 	}
 	
-	function getsafetytip(){
-	   
-	}
-	
-	 
 	
 	

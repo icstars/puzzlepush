@@ -4,22 +4,41 @@
 	<title>Puzzle Push</title>	
 <link rel = "stylesheet" href="styles/splash.css"/>
 <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 <script type="text/javascript" src="scripts/servicecalls.js"></script>
 <script type="text/javascript" src="scripts/splash.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>		
+<script type = "text/javascript" src = "puzzlepush/ppproto.html"></script>
+
+		
 <script>
 				$(document).ready(function(){
 					$(".start").click(function(){
 						//always start id with hash tags
+						//always start classes with a "." javascript
 						$("#splashpage").fadeOut(3000);
 						});
 					});
-				
-				
-				
+	
+                    
+					
+					$(document).ready(function(){
+					$(".safetytip").click(function(){
+						//always start id with hash tags
+						//always start classes with a "." javascript
+						$("#gettrivia").fadeIn(3000);
+						});
+						});	
+						
+					$(document).ready(function(){
+						$(".safetytip").click(function(){
+						$("#gettrivia").fadeOut(3000);
+						});
+						});	 
+					
+
 </script>
-		
-    
+ 
+				
 	
 	</head>
 		<body width="auto">
@@ -27,16 +46,13 @@
 				<span class="imgpos">		
 	            <img src = "scripts/pp-button.png" style = "height: 200px; width: 200px;"/>	</span>
 			
-				<!--getplaygame is a service call from jquery-->
+				<!--postdate is a service call from jquery-->
 				
-				<button class ="start", onClick= "getplaygame()" style="background-color:red; color: white; font: bold 50px Helvetica">Start</button>
-				<button onclick="postdate()">postdate</button>
-				<button onclick = href="ppproto.html">gmaeboard</button>
+				<button class ="start", onclick="postdate()" style="background-color:red; color: white; font: bold 50px Helvetica">Start</button>
+				<button class = "safetytip"></button>
 				</div>
 				
-				<div id > 
-				</div>
-			     
+				
 				
 
 		</body>	
