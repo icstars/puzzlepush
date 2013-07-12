@@ -23,7 +23,7 @@
        	  	success: function(msg){
        			var thesafety = json.parse(msg.d); 
        			console.log(thesafety); 
-       			postsafetytip(thesafety); 
+       			triviapage(thesafety); 
        		 },
         	 failure: function(err){
        			console.log(err);
