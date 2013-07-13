@@ -76,6 +76,7 @@
     <Content Include="defaulttest.html" />
     <Content Include="helloworld1.html" />
     <Content Include="hw.aspx" />
+    <Content Include="ppproto.html" />
     <Content Include="randomarray.aspx" />
     <Content Include="Scripts\servicecalls.js" />
     <Content Include="Scripts\test.js" />

@@ -12,6 +12,8 @@ using Newtonsoft.Json;
 
 namespace puzzlepush
 {
+    
+
     public partial class play : System.Web.UI.Page
     {
         static Random number = new Random();
@@ -29,9 +31,9 @@ namespace puzzlepush
                 //json = getarray();
                 //Response.Write(json);
                 //Response.Write(getjson());
-                string[] board = new string[] {"image1", "image2", "image3", "image4", "image5", "image1", "image3", "image4" };
-                //savearray(board);
-                Response.Write(savearray(board));
+                string[,] board = new string[,] { { "1", "2", "3", "4", "5" }, { "6", "7", "8", "9", "10" }, { "11", "12", "13", "14", "15" }, { "16", "17", "18", "19", "20" }, { "21", "22", "23", "24", "25" } };
+                //string[,] board1 = arrayer();
+                Response.Write(saveboard(board));
             }
             catch (Exception ex)
             {
@@ -76,13 +78,7 @@ namespace puzzlepush
             return gettrivia();
         }
 
-        [WebMethod]
-        public static string datetest(string datestring)
-        {
-            //string json;
-            //json = JsonConvert.SerializeObject(datestring);
-            return datestring;
-        }
+        
 
         public static void connect(string db)
         {
@@ -144,75 +140,70 @@ namespace puzzlepush
             return json;
         }
 
+       
         [WebMethod]
-        public static string savearray(Array boardarray)
+        public static string saveboard(string[,] arrayboard)
         {
             string json;
-            string insert ="addboard";
-            SqlCommand insertname = new SqlCommand(insert, conn);
-            insertname.CommandType = CommandType.StoredProcedure;
-            List<string> image1 = new List<string>();
-            List<string> image2 = new List<string>();
-            List<string> image3 = new List<string>();
-            List<string> image4 = new List<string>();
-            List<string> image5 = new List<string>();
+           
+            string query="";
+            SqlCommand insertname = new SqlCommand();
+            
+            List<string> listboard = new List<string>();
+            List<string> listcol = new List<string>();
+
             try
             {
-                connect("puzzlepush");
+                
 
-                foreach(string image in boardarray)
+                foreach (string image in arrayboard)
                 {
-                    if(image == "image1")
-                    {
-                        image1.Add(image);
-                    }
-                    if(image == "image2")
-                    {
-                        image2.Add(image);
-                    }
-                    if(image == "image3")
-                    {
-                        image3.Add(image);
-                    }
-                    if(image == "image4")
-                    {
-                        image4.Add(image);
-                    }
-                    if(image == "image5")
-                    {
-                        image5.Add(image);
-                    }
+                    listboard.Add(image);
+                }
+                string header = "INSERT INTO poz ";
+                string cols = "(poz0";
+                string vals = "VALUES ('@" + listboard[0] + "'";
+
+                for (int i = 1; i < listboard.Count; i++)
+                {
+                    
+                    cols += ",poz" + i;
+                    vals += ",'@" + listboard[i] + "'";
+
+                }
+                cols += ") ";
+                vals += ")";
+                
+                query = header + cols + vals;
+                
+                insertname = new SqlCommand(query, conn);
+                for(int k = 0; k<listboard.Count;k++)
+                {
+                    string parm = "@1,"+listboard[k+1]+"";
+                    insertname.Parameters.AddWithValue(parm, listboard[k]);
                 }
 
-                SqlParameter parm1 = new SqlParameter("@image1",image1);
-                SqlParameter parm2 = new SqlParameter("@image2",image2);
-                SqlParameter parm3 = new SqlParameter("@image3",image3);
-                SqlParameter parm4 = new SqlParameter("@image4",image4);
-                SqlParameter parm5 = new SqlParameter("@image5",image5);
-
-                insertname.Parameters.Add(parm1);
-                insertname.Parameters.Add(parm2);
-                insertname.Parameters.Add(parm3);
-                insertname.Parameters.Add(parm4);
-                insertname.Parameters.Add(parm5);
-
+                json = JsonConvert.SerializeObject(insertname);
+                insertname.CommandType = CommandType.Text;
+                
+                connect("puzzlepush");
                 insertname.ExecuteNonQuery();
                 conn.Close();
 
             }
             catch (Exception ex)
             {
-                json = JsonConvert.SerializeObject(ex);
+                json = JsonConvert.SerializeObject("saveboard"+ex);
                 Console.WriteLine(json);
             }
+            
+            
+            return query;
 
-            json = JsonConvert.SerializeObject(insertname);
-            return json;
-            
-            
+
         }
 
-        public static Array arrayer()
+        public static string[,] arrayer()
         {
             string[,] myarray = new string[5, 5];
             List<String> names = makelist();
@@ -246,7 +237,7 @@ namespace puzzlepush
             {
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    string s = (string)dt.Rows[i]["img_name"];
+                    string s = (string)dt.Rows[i]["name"];
                     stringlist.Add(s);
 
                 }
@@ -273,7 +264,7 @@ namespace puzzlepush
             {
                 connect("puzzlepush");
                 //connects to the database and retrieves the image names stores it in a Datatable
-                SqlDataAdapter Adapterimgnames = new SqlDataAdapter("select img_name from images", conn);
+                SqlDataAdapter Adapterimgnames = new SqlDataAdapter("select name from images", conn);
                 Adapterimgnames.Fill(ds, "imgnames");
                 dt = ds.Tables["imgnames"];
                 conn.Close();
