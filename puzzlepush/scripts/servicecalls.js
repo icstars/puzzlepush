@@ -3,7 +3,7 @@
 	var thedate = new Date();
 	$.ajax({
 	    type: "POST",
-	    url: "play.aspx/recordstart",
+	    url: "play.aspx/datetest",
 	    data: JSON.stringify({datestring: thedate }),
 	    contentType: "application/json",
 	    success: function (msg) {
