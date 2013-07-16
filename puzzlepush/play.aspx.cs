@@ -66,7 +66,7 @@ namespace puzzlepush
                 insertname.Parameters.Add(parmip);
                 insertname.Parameters.Add(parmdate);
                 // run the stored procedure, which updates the database with user start time and IP
-                insertname.ExecuteNonQuery();
+                //insertname.ExecuteNonQuery();
                 conn.Close();
             }
 

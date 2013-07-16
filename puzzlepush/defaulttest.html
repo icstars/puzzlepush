@@ -7,7 +7,6 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 <script type="text/javascript" src="scripts/servicecalls.js"></script>
 <script type="text/javascript" src="scripts/splash.js"></script>
-<script type = "text/html" src="ppproto.html"></script>
 
 		
 <script>
@@ -16,32 +15,42 @@
             //always start id with hash tags
             //always start classes with a "." javascript
             $("#splashpage").fadeOut(3000);
+            
         });
-    });
 
+        $(".board").click(function () {
+            //always start id with hash tags
+            //always start classes with a "." javascript
+            $("#gettrivia").fadeOut(3000);
 
-    $(document).ready(function () {
+        });
         $(".safetytip").click(function () {
             //always start id with hash tags
             //always start classes with a "." javascript
-            $("#gettrivia").fadeIn(3000);
+            
+
         });
+     
+
     });
 
-    $(document).ready(function () {
-        $(".safetytip").click(function () {
-            $("#gettrivia").fadeOut(3000);
-        });
-    });
 
+    function triviapage(trivia) {
+        $("#gettrivia1").text(trivia);
+        console.log("front"+trivia);
+    }
+    function boardpage() {
+
+    }
 
 </script>
  
 				
 	
 	</head>
-		<body width="auto">
-				<div id = "splashpage">
+		<body>
+			
+            	<div id = "splashpage" style="height:700px;width:700px;background-color:white">
 				<span class="imgpos">		
 	            <img src = "scripts/pp-button.png" style = "height: 200px; width: 200px;"/>	</span>
 			
@@ -49,10 +58,17 @@
 				
 				<button class ="start", onclick="postdate()" style="background-color:red; color: white; font: bold 50px Helvetica">Start</button>
 				<button class = "safetytip">safety</button>
-				<button class= "board" onclick ="postboard()">board</button>
+				
+				</div>
+
+				<div id="gettrivia" style="height:700px; width:700px;background-color:white">
+                    <div id="gettrivia1"></div>
+                    <button class= "board" onclick ="postboard()">board</button>
 				</div>
 				
-				
+                <div id="boardpage" style="height:700px; width:700px;background-color:yellow">
+
+                </div>
 				
 
 		</body>	
