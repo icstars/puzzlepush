@@ -21,7 +21,7 @@
         $(".board").click(function () {
             //always start id with hash tags
             //always start classes with a "." javascript
-            $("#gettrivia").fadeOut(3000);
+            $("#loadingpage").fadeOut(3000);
 
         });
         $(".safetytip").click(function () {
@@ -36,7 +36,7 @@
 
 
     function triviapage(trivia) {
-        $("#gettrivia1").text(trivia);
+        $("#gettrivia").text(trivia);
         console.log("front"+trivia);
     }
     function boardpage() {
@@ -51,21 +51,28 @@
 		<body>
 			
             	<div id = "splashpage" style="height:700px;width:700px;background-color:white">
-				<span class="imgpos">		
-	            <img src = "scripts/pp-button.png" style = "height: 200px; width: 200px;"/>	</span>
+				
+                    <span class="imgpos">
+                        <img src = "scripts/pp-button.png" style = "height: 200px; width: 200px;"/>	
+                    </span>
 			
 				<!--postdate is a service call from jquery-->
-				
 				<button class ="start", onclick="postdate()" style="background-color:red; color: white; font: bold 50px Helvetica">Start</button>
-				<button class = "safetytip">safety</button>
+				
 				
 				</div>
 
-				<div id="gettrivia" style="height:700px; width:700px;background-color:white">
-                    <div id="gettrivia1"></div>
+                <!-- make this div look like a loading page -->
+				<div id="loadingpage" style="height:700px; width:700px;background-color:white">
+                    
+                    <!-- this is the div where the tip is writ -->
+                    <div id="gettrivia"></div>
+                    
                     <button class= "board" onclick ="postboard()">board</button>
-				</div>
 				
+                </div>
+				
+                <!--Add PPproto to this div -->
                 <div id="boardpage" style="height:700px; width:700px;background-color:yellow">
 
                 </div>
