@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ajax call which posts the date to the server */
 function postdate() {
     var thedate = new Date();
@@ -12,6 +13,22 @@ function postdate() {
         }
     });
 }
+=======
+ /* ajax call which posts the date to the server */ 
+   function postdate(){
+	var thedate = new Date();
+	$.ajax({
+	    type: "POST",
+	    url: "play.aspx/recordstart",
+	    data: JSON.stringify({datestring: thedate }),
+	    contentType: "application/json",
+	    success: function (msg) {
+	    	getsafetytip(); 
+	        console.log(msg.d);
+	    }
+	});
+   }
+>>>>>>> deace81cbfc995c2c2094a065b89aa530e13b170
 
 /* ajax call which gets the trivia question from the server */
 function getsafetytip() {

@@ -5,7 +5,10 @@
 		document.write (trivia);
 	}
 	 
-	 
+	function getboard(){
+		return postboard();
+	
+	} 
 	//finished running this function
 	function getdate(){
 		 return new Date();
