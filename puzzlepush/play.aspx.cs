@@ -17,23 +17,26 @@ namespace puzzlepush
     public partial class play : System.Web.UI.Page
     {
         static Random number = new Random();
-        
         static SqlConnection conn;
+        static int recordsin;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             string json;
+
            
             try
             {
-                //Response.Write(recordstart("2013-06-30"));
-                //Response.Write(gettrivia());
-                //json = getarray();
-                //Response.Write(json);
-                //Response.Write(getjson());
+                Response.Write(recordstart("30-12-1111"));
                 string[,] board = new string[,] { { "1", "2", "3", "4", "5" }, { "6", "7", "8", "9", "10" }, { "11", "12", "13", "14", "15" }, { "16", "17", "18", "19", "20" }, { "21", "22", "23", "24", "25" } };
                 //string[,] board1 = arrayer();
-                Response.Write(saveboard(board));
+                //Response.Write(saveboard(board));
+
+                //json = JsonConvert.SerializeObject(saveboard(board));
+                Response.Write(getjson());
+                //Response.Write(recordsin.ToString());
+
+
             }
             catch (Exception ex)
             {
@@ -49,10 +52,8 @@ namespace puzzlepush
             string json;
             try
             {
-                connect("puzzlepush");
-
                 string insert = "addip";
-                SqlCommand insertname = new SqlCommand(insert, conn);
+                SqlCommand insertname = new SqlCommand(insert, connect("puzzlepush"));
                 insertname.CommandType = CommandType.StoredProcedure;
                 
                 // gets the IP from the jQuery request
@@ -78,24 +79,6 @@ namespace puzzlepush
             return gettrivia();
         }
 
-        
-
-        public static void connect(string db)
-        {
-            try
-            {
-                string ConnectionString = "Password=!31497Oo;User ID=dbdev;Initial Catalog="+db+";Integrated Security=True;Trusted_Connection=No;Data Source=ics-c28-02.cloudapp.net";
-                conn = new SqlConnection(ConnectionString);
-
-                //open the connection to the database
-                conn.Open();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
-
         [WebMethod]
         public static string gettrivia()
         {
@@ -105,9 +88,9 @@ namespace puzzlepush
 
             try
             {
-                connect("puzzlepush");
+                
                 //gets a piece of trivia from the database returns it as a JSON string
-                da = new SqlDataAdapter("selecttriviatip", conn);
+                da = new SqlDataAdapter("selecttriviatip", connect("puzzlepush"));
                 da.Fill(ds, "trivia");
 
                 json = JsonConvert.SerializeObject(ds);
@@ -121,6 +104,71 @@ namespace puzzlepush
 
             return json;
         }
+
+        [WebMethod]
+        public static string saveboard(string[,] arrayboard)
+        {
+            string json;
+            string query="";
+            SqlCommand insertname = new SqlCommand();
+            List<string> listboard = new List<string>();
+
+            try
+            {
+                foreach (string image in arrayboard)
+                {
+                    listboard.Add(image);
+                }
+                string header = "INSERT INTO poz ";
+                string cols = "(poz0";
+                string vals = "VALUES ('@" + listboard[0] + "'";
+
+                for (int i = 1; i < listboard.Count; i++)
+                {   
+                    cols += ",poz" + i;
+                    vals += ",'@" + listboard[i] + "'";
+                }
+                cols += ") ";
+                vals += ")";
+                
+                query = header + cols + vals;
+                insertname.CommandType = CommandType.Text;
+                insertname.CommandText = query;
+                
+                
+
+                
+                insertname = new SqlCommand(query, connect("puzzlepush"));
+        
+                /*for(int k = 0; k<listboard.Count;k++)
+                {
+                    string valparm = "@poz" + k + "";
+                    //insertname.Parameters.AddWithValue(valparm, listboard[k]);
+
+                    insertname.Parameters.Add(new SqlParameter(valparm, listboard[k]));
+                }*/
+               
+
+                recordsin = insertname.ExecuteNonQuery();
+                
+                conn.Close();
+
+                json = JsonConvert.SerializeObject(insertname);
+
+            }
+            catch (Exception ex)
+            {
+                json = JsonConvert.SerializeObject("saveboard"+ex);
+                Console.WriteLine(json);
+                Console.WriteLine(recordsin);
+            }
+            
+            
+            return query;
+
+
+        }
+
         [WebMethod]
         public static string getarray()
         {
@@ -138,69 +186,6 @@ namespace puzzlepush
             }
 
             return json;
-        }
-
-       
-        [WebMethod]
-        public static string saveboard(string[,] arrayboard)
-        {
-            string json;
-           
-            string query="";
-            SqlCommand insertname = new SqlCommand();
-            
-            List<string> listboard = new List<string>();
-            List<string> listcol = new List<string>();
-
-            try
-            {
-                
-
-                foreach (string image in arrayboard)
-                {
-                    listboard.Add(image);
-                }
-                string header = "INSERT INTO poz ";
-                string cols = "(poz0";
-                string vals = "VALUES ('@" + listboard[0] + "'";
-
-                for (int i = 1; i < listboard.Count; i++)
-                {
-                    
-                    cols += ",poz" + i;
-                    vals += ",'@" + listboard[i] + "'";
-
-                }
-                cols += ") ";
-                vals += ")";
-                
-                query = header + cols + vals;
-                
-                insertname = new SqlCommand(query, conn);
-                for(int k = 0; k<listboard.Count;k++)
-                {
-                    string parm = "@1,"+listboard[k+1]+"";
-                    insertname.Parameters.AddWithValue(parm, listboard[k]);
-                }
-
-                json = JsonConvert.SerializeObject(insertname);
-                insertname.CommandType = CommandType.Text;
-                
-                connect("puzzlepush");
-                insertname.ExecuteNonQuery();
-                conn.Close();
-
-            }
-            catch (Exception ex)
-            {
-                json = JsonConvert.SerializeObject("saveboard"+ex);
-                Console.WriteLine(json);
-            }
-            
-            
-            return query;
-
-
         }
 
         public static string[,] arrayer()
@@ -228,6 +213,55 @@ namespace puzzlepush
             return myarray;
         }
 
+        [WebMethod]
+        public static string getjson()
+        {
+            string json;
+            // define a connection to the database
+            try
+            {
+               
+                //run an sql query and create a dataset to store the result
+                SqlDataAdapter MyAdapter = new SqlDataAdapter("select * from splashPage", connect("puzzlepush")); 
+                DataSet ds = new DataSet();
+                
+                //fill the dataset with the results from the sql query and name the table 'hw'
+                
+                MyAdapter.Fill(ds, "hw");
+                //Using Newtonsoft's JSON.NET, convert our dataset object from C# to JSON (JavaScript Object Notation)
+                json = JsonConvert.SerializeObject(ds);
+                conn.Close();
+            }
+
+            catch (Exception ex)
+            {
+                //write any error messages
+                //Console.Write(ex.Message);
+                json = JsonConvert.SerializeObject(ex);
+                Console.WriteLine(json);
+            }
+
+            return json;
+        }
+
+        public static SqlConnection connect(string db)
+        {
+            try
+            {
+                string ConnectionString = "Password=!31497Oo;User ID=dbdev;Initial Catalog=" + db + ";Integrated Security=True;Trusted_Connection=No;Data Source=ics-c28-02.cloudapp.net";
+                conn = new SqlConnection(ConnectionString);
+
+                //open the connection to the database
+                conn.Open();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return conn;
+        }
+
         public static List<String> makelist()
         {
             //takes the DataTable and casts it to a string List
@@ -249,22 +283,15 @@ namespace puzzlepush
             return stringlist;
         }
 
-        public static int randomnumber()
-        {
-            //Return a random number between 0 and 4
-            int rn = number.Next(0, 5);
-            return rn;
-        }
-
         public static DataTable getimagenames()
         {
             DataSet ds = new DataSet();
             DataTable dt = new DataTable();
             try
             {
-                connect("puzzlepush");
+
                 //connects to the database and retrieves the image names stores it in a Datatable
-                SqlDataAdapter Adapterimgnames = new SqlDataAdapter("select name from images", conn);
+                SqlDataAdapter Adapterimgnames = new SqlDataAdapter("select name from images", connect("puzzlepush"));
                 Adapterimgnames.Fill(ds, "imgnames");
                 dt = ds.Tables["imgnames"];
                 conn.Close();
@@ -277,37 +304,11 @@ namespace puzzlepush
 
         }
 
-        [WebMethod]
-        public static string getjson()
+        public static int randomnumber()
         {
-            string json;
-            // define a connection to the database
-            try
-            {
-                connect("HW");
-                //run an sql query and create a dataset to store the result
-                SqlDataAdapter MyAdapter = new SqlDataAdapter("select * from HW", conn);
-                DataSet ds = new DataSet();
-                
-                //fill the dataset with the results from the sql query and name the table 'hw'
-                
-                MyAdapter.Fill(ds, "hw");
-                //Using Newtonsoft's JSON.NET, convert our dataset object from C# to JSON (JavaScript Object Notation)
-                json = JsonConvert.SerializeObject(ds);
-                conn.Close();
-            }
-
-            catch (Exception ex)
-            {
-                //write any error messages
-                //Console.Write(ex.Message);
-                json = JsonConvert.SerializeObject(ex);
-                Console.WriteLine(json);
-            }
-
-            return json;
-
-
+            //Return a random number between 0 and 4
+            int rn = number.Next(0, 5);
+            return rn;
         }
 
     }

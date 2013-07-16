@@ -1,4 +1,4 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
 <title>Puzzle Push</title>
 <head>
@@ -127,12 +127,15 @@ $(document).ready(function(){
 	var posY;
 	var gameState="pick";
 	var tiles = new Array();
+	var htiles = new Array();
 	var movingItems = 0;
 	var imgTiles = new Array("image1","image2","image3","image4","image5");
 	for(i=0;i<5;i++){
 		tiles[i]=new Array();
+		htiles[i]=new Array();
 		for(j=0;j<5;j++){
 			tiles[i][j]=-1;
+			htiles[i][j]=-1;
 		}
 	  }
 	 for(i=0;i<5;i++){
@@ -144,17 +147,18 @@ $(document).ready(function(){
 	 		$("#tile_"+i+"_"+j).addClass(imgTiles[tiles[i][j]]);
 	 		$("#tile_"+i+"_"+j).css({"top":(i*60)+10+"px","left":(j*60)+10+"px","width":"50px","height":"50px","position":"absolute","border":"1px solid black","cursor":"pointer","background-image":imgTiles[tiles[i][j]]});
 	 	}
+		}
 	 	for(k=0;k<2;k++){
 	 		for(a=0;a<5;a++){
 		 		do{
-		 			tiles[k][a]=Math.floor(Math.random()*5);
+		 			htiles[k][a]=Math.floor(Math.random()*5);
 		 		}while(isStreak(k,a))
 		 		$("#tilebox").append('<div class = "htile" id = "htile_'+k+'_'+a+'"></div>');
-		 		$("#htile_"+k+"_"+a).addClass(imgTiles[tiles[k][a]]);
-		 		$("#htile_"+k+"_"+a).css({"top":(k*60)+10+"px","left":(a*60)+10+"px","width":"50px","height":"50px","position":"absolute","border":"1px solid black","cursor":"pointer","background-image":imgTiles[tiles[k][a]]});
+		 		$("#htile_"+k+"_"+a).addClass(imgTiles[htiles[k][a]]);
+		 		$("#htile_"+k+"_"+a).css({"top":(k*60)+10+"px","left":(a*60)+10+"px","width":"50px","height":"50px","position":"absolute","border":"1px solid black","cursor":"pointer","background-image":imgTiles[htiles[k][a]]});
 	 		}
 	 	}
-	 }
+	 
 	 
 	
 	 $(".htile" ).draggable({
