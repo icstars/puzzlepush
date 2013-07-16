@@ -1,40 +1,82 @@
 <html>
 
 	<head>
-			
-<style type="text/css">
-
-	#start{
-		position: absolute;
-		top: 400px;
-		left: 175px;
-	}
-
-
-	.imgpos{
-			position: absolute;
-			top: 100px;
-			left: 150px;
-	}
-</style>
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<title>Puzzle Push</title>	
+<link rel = "stylesheet" href="styles/splash.css"/>
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 <script type="text/javascript" src="scripts/servicecalls.js"></script>
+<script type="text/javascript" src="scripts/splash.js"></script>
 
-		<title>Puzzle Push</title>
+		
+<script>
+    $(document).ready(function () {
+        $(".start").click(function () {
+            //always start id with hash tags
+            //always start classes with a "." javascript
+            $("#splashpage").fadeOut(3000);
 
-		<span class="imgpos">		
-	<img src = "images/pp-button.png", size: height= "200px", width:"200px"/>		</span>
-        
+        });
+
+        $(".board").click(function () {
+            //always start id with hash tags
+            //always start classes with a "." javascript
+            $("#loadingpage").fadeOut(3000);
+
+        });
+        $(".safetytip").click(function () {
+            //always start id with hash tags
+            //always start classes with a "." javascript
+
+
+        });
+
+
+    });
+
+
+    function triviapage(trivia) {
+        $("#gettrivia").text(trivia);
+        console.log("front" + trivia);
+    }
+    function boardpage() {
+
+    }
+
+</script>
  
-
-	</head>
-		<body width="auto">
-			
 				
+	
+	</head>
+		<body>
 			
+            	<div id = "splashpage" style="height:700px;width:700px;background-color:white">
+				
+                    <span class="imgpos">
+                        <img src = "scripts/pp-button.png" style = "height: 200px; width: 200px;"/>	
+                    </span>
 			
-				<button id ="start", onclick= "getplaygame();" style="background-color:red; color: white; font: bold 50px Comic Sans MS">Start</button>
-			
+				<!--postdate is a service call from jquery-->
+				<button class ="start", onclick="postdate()" style="background-color:red; color: white; font: bold 50px Helvetica">Start</button>
+				
+				
+				</div>
+
+                <!-- make this div look like a loading page -->
+				<div id="loadingpage" style="height:700px; width:700px;background-color:white">
+                    
+                    <!-- this is the div where the tip is writ -->
+                    <div id="gettrivia"></div>
+                    
+                    <button class= "board" onclick ="postboard()">board</button>
+				
+                </div>
+				
+                <!--Add PPproto to this div -->
+                <div id="boardpage" style="height:700px; width:700px;background-color:yellow">
+
+                </div>
+				
 
 		</body>	
 </html>
