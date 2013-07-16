@@ -6,9 +6,12 @@ function postdate() {
         url: "play.aspx/recordstart",
         data: JSON.stringify({ datestring: thedate }),
         contentType: "application/json",
+        dataType: "json",
         success: function (msg) {
-            getsafetytip();
-            console.log(msg.d);
+            var s = JSON.parse(msg.d);
+            //console.log(s.trivia[0]);
+            triviapage((s.trivia[0].tip));
+            console.log("postdate"+msg.d);
         }
     });
 }
@@ -24,7 +27,7 @@ function getsafetytip() {
         success: function (msg) {
             var thesafety = json.parse(msg.d);
             console.log(thesafety);
-            //triviapage(thesafety); 
+            triviapage(thesafety); 
         },
         failure: function (err) {
             console.log(err);
@@ -40,6 +43,7 @@ function postboard() {
         data: JSON.stringify({ boardarray: theboard }),
         contentType: "application/json",
         success: function (msg) {
+            boardpage();
             console.log(msg.d);
         }
     });

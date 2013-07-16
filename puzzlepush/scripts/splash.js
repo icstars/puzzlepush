@@ -1,9 +1,8 @@
  //just getting safety tip   
 	
-	function triviapage (){
-	  	var trivia = getsafetytip();
-		document.write (trivia);
-	}
+	/*function triviapage(trivia){
+	    $("#gettrivia").t
+	}*/
 	 
 	function getboard(){
 		return postboard();
