@@ -5,6 +5,7 @@
 <link rel = "stylesheet" href="styles/splash.css"/>
 <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script src="scripts/json2.js"></script>
 <script type="text/javascript" src="scripts/servicecalls.js"></script>
 <script type="text/javascript" src="scripts/splash.js"></script>
 
@@ -14,14 +15,14 @@
         $(".start").click(function () {
             //always start id with hash tags
             //always start classes with a "." javascript
-            $("#splashpage").fadeOut(3000);
+            $("#splashpage").fadeOut(1000);
 
         });
 
         $(".board").click(function () {
             //always start id with hash tags
             //always start classes with a "." javascript
-            $("#loadingpage").fadeOut(3000);
+            $("#loadingpage").fadeOut(1000);
 
         });
         $(".safetytip").click(function () {
@@ -36,8 +37,8 @@
 
 
     function triviapage(trivia) {
-        $("#gettrivia").text(trivia);
-        console.log("front" + trivia);
+        $("#gettrivia").text("Safety Tip of the Play: \r\n"+trivia);
+        //console.log("front" + trivia);
     }
     function boardpage() {
 
@@ -50,10 +51,10 @@
 	</head>
 		<body>
 			
-            	<div id = "splashpage" style="height:700px;width:700px;background-color:white">
+            	<div id = "splashpage" style="height:700px;width:700px;position:fixed; top:10px;left:10px; z-index:2;background-color:white">
 				
                     <span class="imgpos">
-                        <img src = "scripts/pp-button.png" style = "height: 200px; width: 200px;"/>	
+                        <img src = "scripts/pp-button.png" style = "position:absolute;left:-10px; height: 200px; width: 200px;"/>	
                     </span>
 			
 				<!--postdate is a service call from jquery-->
@@ -63,17 +64,22 @@
 				</div>
 
                 <!-- make this div look like a loading page -->
-				<div id="loadingpage" style="height:700px; width:700px;background-color:white">
+				<div id="loadingpage" style="height:700px; width:400px;position:fixed; top:10px;left:10px;z-index:1;background-color:white">
                     
                     <!-- this is the div where the tip is writ -->
-                    <div id="gettrivia"></div>
+                    <div id="gettrivia" align="center" style="position:fixed;top:110px;left:40px; width:400px; border:outset 10px red; color:red; font:bold 20px Helvetica">
+                        
+                    </div>
                     
-                    <button class= "board" onclick ="postboard()">board</button>
+                    <button class= "board" onclick ="postboard()" style="position:fixed;top:400px;left:150px;background-color:red; color: white; font: bold 50px Helvetica">Board</button>
 				
                 </div>
 				
                 <!--Add PPproto to this div -->
-                <div id="boardpage" style="height:700px; width:700px;background-color:yellow">
+                <div id="boardpage" style="position:fixed; top:10px;left:10px;z-index:0;">
+
+                    <iframe src="ppproto.html" width="500" height="600" seamless></iframe>
+
 
                 </div>
 				

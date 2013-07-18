@@ -36,15 +36,32 @@ function getsafetytip() {
 }
 
 function postboard() {
-    var theboard = new Array()[["1", "2", "3", "4", "5"], ["6", "7", "8", "9", "10"], ["11", "12", "13", "14", "15"], ["16", "17", "18", "19", "20"], ["21", "22", "23", "24", "25"]]
+    //= new Array()[["1", "2", "3","4", "5"], ["6", "7", "8", "9", "10"], ["11", "12", "13", "14", "15"], ["16", "17", "18", "19", "20"], ["21", "22", "23", "24", "25"]];
+
+    var theboard = new Array(5);
+    for (k = 0; k < 5; k++) {
+        theboard[k] = new Array(5);
+    }
+    var ele = 0
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
+            
+            theboard[i][j] = ele.toString();
+            ele++;
+        }
+    }
+    console.log(theboard);
+    console.log(theboard[0][1]);
+
     $.ajax({
         type: "POST",
-        url: "play.aspx/saveboard",
-        data: JSON.stringify({ boardarray: theboard }),
+        url: "api/Board",
+        data: JSON.stringify({arrayboard:theboard}),
         contentType: "application/json",
+        dataType: "json",
         success: function (msg) {
-            boardpage();
-            console.log(msg.d);
+            //boardpage();
+            Console.Log("success");
         }
     });
 }

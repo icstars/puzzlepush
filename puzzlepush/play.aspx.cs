@@ -2,17 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
 using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+using System.Diagnostics;
 using System.Data;
 using System.Data.SqlClient;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
+
 
 namespace puzzlepush
 {
-    
+    [DataContract]
+    public class SerialArray 
+    {
+        public string[,] array;
+
+        [DataMember]
+            public string[,] arrayboard
+        {
+
+            get {return array; }
+            set { array = value; }
+        }
+    }
 
     public partial class play : System.Web.UI.Page
     {
@@ -41,7 +57,7 @@ namespace puzzlepush
             catch (Exception ex)
             {
                 json = JsonConvert.SerializeObject(ex);
-                Console.WriteLine(json);
+                Debug.WriteLine(json);
             }
         }
 
@@ -74,7 +90,7 @@ namespace puzzlepush
             {
                 //write any error messages
                 json = JsonConvert.SerializeObject(ex);
-                Console.WriteLine("recordstart" + ex.Message);
+                Debug.WriteLine("recordstart" + ex.Message);
             }
             return gettrivia();
         }
@@ -99,15 +115,19 @@ namespace puzzlepush
             catch (Exception ex)
             {
                 json = JsonConvert.SerializeObject(ex);
-                Console.WriteLine("gettrivia"+ex.Message);
+                Debug.WriteLine("gettrivia"+ex.Message);
             }
 
             return json;
         }
 
         [WebMethod]
-        public static string saveboard(string[,] arrayboard)
+        public static string saveboard(SerialArray test)
         {
+            //JavaScriptSerializer jss = new JavaScriptSerializer();
+            //string[,] mystring = jss.Deserialize<string[,]>(arrayboard);
+
+            Debug.Write("hello");
             string json;
             string query="";
             SqlCommand insertname = new SqlCommand();
@@ -115,7 +135,7 @@ namespace puzzlepush
 
             try
             {
-                foreach (string image in arrayboard)
+                foreach(string image in test.arrayboard)
                 {
                     listboard.Add(image);
                 }
@@ -159,8 +179,8 @@ namespace puzzlepush
             catch (Exception ex)
             {
                 json = JsonConvert.SerializeObject("saveboard"+ex);
-                Console.WriteLine(json);
-                Console.WriteLine(recordsin);
+                Debug.WriteLine(json);
+                Debug.WriteLine(recordsin);
             }
             
             
@@ -168,6 +188,41 @@ namespace puzzlepush
 
 
         }
+
+        [WebMethod]
+        public static string recordscore(string scorestring)
+        {
+            string json;
+            try
+            {
+                SqlConnection conn = connect("puzzlepush");
+                string insert = "addscore";
+                SqlCommand insertname = new SqlCommand(insert, conn);
+                insertname.CommandType = CommandType.StoredProcedure;
+
+                // gets the IP from the jQuery request
+                string sip = HttpContext.Current.Request.UserHostAddress;
+                json = JsonConvert.SerializeObject(sip);
+
+                // add the IP and date we get as parameters to a stored procedure
+                SqlParameter parmdate = new SqlParameter("@startdate", scorestring);
+                SqlParameter parmip = new SqlParameter("@ip", sip);
+                insertname.Parameters.Add(parmip);
+                insertname.Parameters.Add(parmdate);
+                // run the stored procedure, which updates the database with user start time and IP
+                insertname.ExecuteNonQuery();
+                conn.Close();
+            }
+
+            catch (Exception ex)
+            {
+                //write any error messages
+                json = JsonConvert.SerializeObject(ex);
+                Debug.WriteLine("recordstart" + ex.Message);
+            }
+            return gettrivia();
+        }
+
 
         [WebMethod]
         public static string getarray()
@@ -182,7 +237,7 @@ namespace puzzlepush
             catch (Exception ex)
             {
                 json = JsonConvert.SerializeObject("getarray" + ex.Message);
-                Console.WriteLine(json);
+                Debug.WriteLine(json);
             }
 
             return json;
@@ -207,7 +262,7 @@ namespace puzzlepush
             }
             catch (Exception ex)
             {
-                Console.WriteLine("arrayer" + ex.Message);
+                Debug.WriteLine("arrayer" + ex.Message);
             }
             
             return myarray;
@@ -222,7 +277,7 @@ namespace puzzlepush
             {
                
                 //run an sql query and create a dataset to store the result
-                SqlDataAdapter MyAdapter = new SqlDataAdapter("select * from splashPage", connect("puzzlepush")); 
+                SqlDataAdapter MyAdapter = new SqlDataAdapter("select * from poz", connect("puzzlepush")); 
                 DataSet ds = new DataSet();
                 
                 //fill the dataset with the results from the sql query and name the table 'hw'
@@ -236,9 +291,9 @@ namespace puzzlepush
             catch (Exception ex)
             {
                 //write any error messages
-                //Console.Write(ex.Message);
+                //Debug.Write(ex.Message);
                 json = JsonConvert.SerializeObject(ex);
-                Console.WriteLine(json);
+                Debug.WriteLine(json);
             }
 
             return json;
@@ -256,7 +311,7 @@ namespace puzzlepush
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return conn;
@@ -278,7 +333,7 @@ namespace puzzlepush
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
             return stringlist;
         }
@@ -298,7 +353,7 @@ namespace puzzlepush
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
             return dt;
 
