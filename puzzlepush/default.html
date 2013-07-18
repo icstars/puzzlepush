@@ -15,29 +15,25 @@
         $(".start").click(function () {
             //always start id with hash tags
             //always start classes with a "." javascript
-            $("#splashpage").fadeOut(1000);
+            $("#splashpage").fadeOut(500);
 
         });
 
         $(".board").click(function () {
             //always start id with hash tags
             //always start classes with a "." javascript
-            $("#loadingpage").fadeOut(1000);
-
-        });
-        $(".safetytip").click(function () {
-            //always start id with hash tags
-            //always start classes with a "." javascript
-
+            $("#loadingpage").fadeOut(500);
 
         });
 
-
+        postdate();
     });
 
 
     function triviapage(trivia) {
-        $("#gettrivia").text("Safety Tip of the Play: \r\n"+trivia);
+        $("#gettrivia").text("Safety Tip of the Play: ");
+        $("#gettrivia").append("<br/>");
+        $("#gettrivia").append(trivia);
         //console.log("front" + trivia);
     }
     function boardpage() {
@@ -58,7 +54,7 @@
                     </span>
 			
 				<!--postdate is a service call from jquery-->
-				<button class ="start", onclick="postdate()" style="background-color:red; color: white; font: bold 50px Helvetica">Start</button>
+				<button class ="start"  style="background-color:red; color: white; font: bold 50px Helvetica">Start</button>
 				
 				
 				</div>
@@ -71,7 +67,7 @@
                         
                     </div>
                     
-                    <button class= "board" onclick ="postboard()" style="position:fixed;top:400px;left:150px;background-color:red; color: white; font: bold 50px Helvetica">Board</button>
+                    <button class= "board" onclick ="postboard()" style="position:fixed;top:410px;left:170px;background-color:red; color: white; font: bold 50px Helvetica">Board</button>
 				
                 </div>
 				
