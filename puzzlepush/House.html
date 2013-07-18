@@ -1,0 +1,70 @@
+<html>
+<head>
+
+
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+</head>
+
+
+
+
+<script>
+
+houseobj = new House("#house");
+
+$(document).ready(function(){
+
+});
+
+
+
+	function House(cssid)
+	{
+		var itemsinhouse = new Array();
+		var safetymeasure = 0;
+		
+		this.additem = function(appliance){
+			itemsinhouse.push(appliance);
+			console.log(itemsinhouse);
+		}
+		
+		this.moveitem =function(appliance){
+			$(appliance).appendTo(cssid);
+		}
+		
+		this.safetylevel = function(){
+			for(i = 0;i<itemsinhouse.length;i++){
+				
+				safetymeasure++;
+			}
+			return safetymeasure;
+		}
+	}
+	
+	function inventory(){
+		
+	}
+	
+	function appliance(){
+		
+	}
+	
+	function safetybar(){
+		
+	}
+</script>
+<body>
+
+
+
+
+
+<div id="house" style="position:fixed;height:500px;width:500px;background-color:white;border:outset 10px brown">
+<div id="inventory" style="position:absolute;top: -10px;left:550px;height:500;width:150;background-color:white;border:outset 10px green">
+		<div id="fridge" onclick="houseobj.moveitem('#fridge')" style="position:absolute;top: 5px;left:5px;height:120;width:120;background-color:white;border:outset 10px red">
+		</div>
+</div>
+	
+</div>
+</body>
+</html>

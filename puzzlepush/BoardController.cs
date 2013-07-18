@@ -42,12 +42,12 @@ namespace puzzlepush
                 }
                 string header = "INSERT INTO poz ";
                 string cols = "(poz0";
-                string vals = "VALUES ('@" + listboard[0] + "'";
+                string vals = "VALUES (@" + listboard[0] + "";
 
                 for (int i = 1; i < listboard.Count; i++)
                 {
                     cols += ",poz" + i;
-                    vals += ",'@" + listboard[i] + "'";
+                    vals += ",@" + listboard[i] + "";
                 }
                 cols += ") ";
                 vals += ")";
@@ -64,14 +64,14 @@ namespace puzzlepush
 
                 for (int k = 0; k < listboard.Count; k++)
                 {
-                    string valparm = "@poz" + k + "";
+                    string valparm = "@" + k + "";
                     //insertname.Parameters.AddWithValue(valparm, listboard[k]);
 
                     insertname.Parameters.Add(new SqlParameter(valparm, listboard[k]));
                 }
 
                 
-                int recordsin = insertname.ExecuteNonQuery();
+                //int recordsin = insertname.ExecuteNonQuery();
 
                 conn.Close();
 
@@ -81,7 +81,7 @@ namespace puzzlepush
             catch (Exception ex)
             {
                 //json = JsonConvert.SerializeObject("saveboard" + ex);
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
                 //Console.WriteLine();
             }
 

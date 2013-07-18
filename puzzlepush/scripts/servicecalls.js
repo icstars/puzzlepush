@@ -61,7 +61,7 @@ function postboard() {
         dataType: "json",
         success: function (msg) {
             //boardpage();
-            Console.Log("success");
+            console.log("success");
         }
     });
 }
