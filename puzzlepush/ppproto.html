@@ -119,8 +119,8 @@ $(document).ready(function(){
 
 		$("#marker").css({"width":"300px","height":"42px","border":"5px solid yellow","position":"absolute"}).hide();
 		$("#gamefield").css({"top":"40px","left":"60px","margin":"auto","position":"absolute"});
-		$("#handbar").css({"width":"300px","height": "63px","position": "relative","border": "2px solid green","top": "350px","left": "57px"});
-		$("#tilebox").css({"width":"300px","height": "125px","position": "relative","border": "2px solid green","top": "365px","left": "57px"});
+		$("#handbar").css({"width":"300px","height": "563px","position": "relative","border": "2px solid green","top": "350px","left": "57px"});
+		$("#tilebox").css({"width":"300px","height": "625px","position": "relative","border": "2px solid green","top": "365px","left": "57px"});
 	var selectedRow=-1;
 	var selectedCol=-1;
 	var posX;
@@ -145,7 +145,7 @@ $(document).ready(function(){
 	 		}while(isStreak(i,j))
 	 		$("#gamefield").append('<div class = "tile" id = "tile_'+i+'_'+j+'"></div>');
 	 		$("#tile_"+i+"_"+j).addClass(imgTiles[tiles[i][j]]);
-	 		$("#tile_"+i+"_"+j).css({"top":(i*60)+10+"px","left":(j*60)+10+"px","width":"50px","height":"50px","position":"absolute","border":"1px solid black","cursor":"pointer","background-image":imgTiles[tiles[i][j]]});
+	 		$("#tile_"+i+"_"+j).css({"top":(i*138)+10+"px","left":(j*138)+10+"px","width":"128px","height":"128px","position":"absolute","border":"1px solid black","cursor":"pointer","background-image":imgTiles[tiles[i][j]]});
 	 	}
 		}
 	 	for(k=0;k<2;k++){
@@ -155,7 +155,7 @@ $(document).ready(function(){
 		 		}while(isStreak(k,a))
 		 		$("#tilebox").append('<div class = "htile" id = "htile_'+k+'_'+a+'"></div>');
 		 		$("#htile_"+k+"_"+a).addClass(imgTiles[htiles[k][a]]);
-		 		$("#htile_"+k+"_"+a).css({"top":(k*60)+10+"px","left":(a*60)+10+"px","width":"50px","height":"50px","position":"absolute","border":"1px solid black","cursor":"pointer","background-image":imgTiles[htiles[k][a]]});
+		 		$("#htile_"+k+"_"+a).css({"top":(k*138)+10+"px","left":(a*138)+10+"px","width":"128px","height":"128px","position":"absolute","border":"1px solid black","cursor":"pointer","background-image":imgTiles[htiles[k][a]]});
 	 		}
 	 	}
 	 
