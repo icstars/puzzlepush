@@ -11,7 +11,7 @@ function postdate() {
             var s = JSON.parse(msg.d);
             //console.log(s.trivia[0]);
             triviapage((s.trivia[0].tip));
-            console.log("postdate"+msg.d);
+            console.log("postdate success");
         }
     });
 }
@@ -39,22 +39,13 @@ function postboard(playerId) {
 
     /*
     var theboard = new Array(5);
-    for (k = 0; k < 5; k++) {
-        theboard[k] = new Array(5);
-    }
-    var ele = 0
-    for (i = 0; i < 5; i++) {
-        for (j = 0; j < 5; j++) {
-            
-            theboard[i][j] = ele.toString();
-            ele++;
-        }
-    }
+    
     console.log(theboard);
     console.log(theboard[0][1]); */
 
     if (!playerId)
         playerId = 1;
+
     var theboard = gettilearray();
     var board = { playerid: playerId , arrayboard: theboard };
 
@@ -65,7 +56,8 @@ function postboard(playerId) {
         contentType: "application/json",
         dataType: "json",
         success: function (msg) {
-            console.log("success");
+            console.log(msg);
+            console.log("postboard success");
         }
     });
 }
@@ -78,8 +70,8 @@ function getboard(Id) {
         contentType: "application/json",
         dataType: "json",
         success: function (result) {
-            return result;
-            console.log("success");
+            //return result;
+            console.log("getboard success");
             console.log(result);
         }
     });

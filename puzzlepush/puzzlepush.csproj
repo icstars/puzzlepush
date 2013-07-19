@@ -170,6 +170,7 @@
     <Compile Include="randomarray.aspx.designer.cs">
       <DependentUpon>randomarray.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Score.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

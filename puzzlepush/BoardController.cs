@@ -32,9 +32,6 @@ namespace puzzlepush
             var board = new Board { Id = id };
             try
             {
-                
-
-                
                 insertname.CommandType = CommandType.Text;
                 insertname.CommandText = query;
 
@@ -58,7 +55,7 @@ namespace puzzlepush
 
                 }
 
-                //makes a 2D array and adds a random element from the dataTable List to it
+                //makes a 2D array from the dataTable List
                 for (int i = 0; i < 5; i++)
                 {
                     for (int j = 0; j < 5; j++)

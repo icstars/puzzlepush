@@ -34,7 +34,7 @@
         $(".housepg").click(function () {
             //always start id with hash tags
             //always start classes with a "." javascript
-            postboard(2);//playerId is the arg for postboard
+            postboard(3);//playerId is the arg for postboard
             $("#boardpage").fadeOut(500);
 
         });
@@ -50,6 +50,21 @@
     }
     function boardpage() {
 
+    }
+    function gettilearray() {
+        var theboard=new Array(5);
+        for (k = 0; k < 5; k++) {
+            theboard[k] = new Array(5);
+        }
+        var ele = 0
+        for (i = 0; i < 5; i++) {
+            for (j = 0; j < 5; j++) {
+
+                theboard[i][j] = ele.toString();
+                ele++;
+            }
+        }
+        return theboard;
     }
 
 </script>

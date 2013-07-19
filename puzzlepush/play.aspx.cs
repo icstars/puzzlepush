@@ -35,9 +35,9 @@ namespace puzzlepush
                 //string[,] board = new string[,] { { "1", "2", "3", "4", "5" }, { "6", "7", "8", "9", "10" }, { "11", "12", "13", "14", "15" }, { "16", "17", "18", "19", "20" }, { "21", "22", "23", "24", "25" } };
                 //string[,] board1 = arrayer();
                 //Response.Write(saveboard(board));
-                //Response.Write(recordscore("35"));
+                Response.Write(recordscore("45"));
                 //json = JsonConvert.SerializeObject(saveboard(board));
-                Response.Write(getjson());
+                //Response.Write(getjson());
                 //Response.Write(recordsin.ToString());
 
 
@@ -176,22 +176,23 @@ namespace puzzlepush
         }
 
         [WebMethod]
-        public static string recordscore(string scorestring)
+        public static Score recordscore(string score)
         {
             string json;
+            var nscore = new Score { Scores = score };
+
             try
             {
                 SqlConnection conn = connect("puzzlepush");
                 string insert = "INSERT INTO scores(score) VALUES(@score)";
                 SqlCommand insertname = new SqlCommand(insert, conn);
                 insertname.CommandType = CommandType.Text;
-
                 // gets the IP from the jQuery request
                 //string sip = HttpContext.Current.Request.UserHostAddress;
                 //json = JsonConvert.SerializeObject(sip);
 
                 // add the IP and date we get as parameters to a stored procedure
-                SqlParameter scoreparm = new SqlParameter("@score", scorestring);
+                SqlParameter scoreparm = new SqlParameter("@score", nscore.Scores);
                 //SqlParameter ipparm = new SqlParameter("@ip", sip);
                 //insertname.Parameters.Add(ipparm);
                 insertname.Parameters.Add(scoreparm);
@@ -206,7 +207,7 @@ namespace puzzlepush
                 json = JsonConvert.SerializeObject(ex);
                 Debug.WriteLine("recordstart" + ex.Message);
             }
-            return scorestring;
+            return nscore;
         }
 
 
