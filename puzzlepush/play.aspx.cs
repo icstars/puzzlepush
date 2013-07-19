@@ -44,7 +44,7 @@ namespace puzzlepush
             try
             {
                 Response.Write(recordstart("30-12-1111"));
-                string[,] board = new string[,] { { "1", "2", "3", "4", "5" }, { "6", "7", "8", "9", "10" }, { "11", "12", "13", "14", "15" }, { "16", "17", "18", "19", "20" }, { "21", "22", "23", "24", "25" } };
+                //string[,] board = new string[,] { { "1", "2", "3", "4", "5" }, { "6", "7", "8", "9", "10" }, { "11", "12", "13", "14", "15" }, { "16", "17", "18", "19", "20" }, { "21", "22", "23", "24", "25" } };
                 //string[,] board1 = arrayer();
                 //Response.Write(saveboard(board));
 
@@ -77,10 +77,10 @@ namespace puzzlepush
                 json = JsonConvert.SerializeObject(sip);
                 
                 // add the IP and date we get as parameters to a stored procedure
-                SqlParameter parmdate = new SqlParameter("@startdate",datestring);
-                SqlParameter parmip = new SqlParameter("@ip", sip);
-                insertname.Parameters.Add(parmip);
-                insertname.Parameters.Add(parmdate);
+                SqlParameter dateparm = new SqlParameter("@startdate",datestring);
+                SqlParameter ipparm = new SqlParameter("@ip", sip);
+                insertname.Parameters.Add(ipparm);
+                insertname.Parameters.Add(dateparm);
                 // run the stored procedure, which updates the database with user start time and IP
                 //insertname.ExecuteNonQuery();
                 conn.Close();
@@ -205,10 +205,10 @@ namespace puzzlepush
                 json = JsonConvert.SerializeObject(sip);
 
                 // add the IP and date we get as parameters to a stored procedure
-                SqlParameter parmdate = new SqlParameter("@startdate", scorestring);
-                SqlParameter parmip = new SqlParameter("@ip", sip);
-                insertname.Parameters.Add(parmip);
-                insertname.Parameters.Add(parmdate);
+                SqlParameter scoreparm = new SqlParameter("@score", scorestring);
+                SqlParameter ipparm = new SqlParameter("@ip", sip);
+                insertname.Parameters.Add(ipparm);
+                insertname.Parameters.Add(scoreparm);
                 // run the stored procedure, which updates the database with user start time and IP
                 insertname.ExecuteNonQuery();
                 conn.Close();

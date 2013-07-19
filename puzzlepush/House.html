@@ -1,8 +1,28 @@
 <html>
 <head>
-
-
 <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+
+<style>
+#house{
+position:fixed;height:500px;width:500px;background-color:white;
+background-image:url(images/house2.png); background-size:500px 500px; background-repeat:no-repeat; background-position:center;
+}
+#fridge{
+position:absolute;top: 40px;left:5px;height:120;width:120;
+background-image:url(images/fridge43.png);background-size:120px 120px;background-repeat:no-repeat;
+border:outset 10px purple;
+}
+#stove{
+position:absolute;top: 190px;left:5px;height:120;width:120;background-image:url(images/stove41.png);
+background-size:120px 120px;background-repeat:no-repeat;
+border:outset 10px green
+}
+#wmachine{
+position:absolute;top: 340px;left:5px;height:120;width:120;background-image:url(images/washmach42.png);
+background-size:120px 120px;background-repeat:no-repeat;
+border:outset 10px orange
+}
+</style>
 </head>
 
 
@@ -29,14 +49,18 @@ $(document).ready(function(){
 		}
 		
 		this.moveitem =function(appliance){
-			$(appliance).appendTo(cssid);
+			var inhouse = appliance+"house";
+			$(appliance).appendTo(inhouse);
+			this.additem(appliance);
+			this.safetylevel();
 		}
 		
 		this.safetylevel = function(){
-			for(i = 0;i<itemsinhouse.length;i++){
-				
+			
+				var count = itemsinhouse.length;
 				safetymeasure++;
-			}
+				$("#safetybar").append('<div id="level'+count+'" style="position:absolute;top:90px; left:'+(((count)*35)+100)+'px;height:20px; width:30px; z-index:4;background-color:red;"></div>')
+			
 			return safetymeasure;
 		}
 	}
@@ -59,9 +83,18 @@ $(document).ready(function(){
 
 
 
-<div id="house" style="position:fixed;height:500px;width:500px;background-color:white;border:outset 10px brown">
-<div id="inventory" style="position:absolute;top: -10px;left:550px;height:500;width:150;background-color:white;border:outset 10px green">
-		<div id="fridge" onclick="houseobj.moveitem('#fridge')" style="position:absolute;top: 5px;left:5px;height:120;width:120;background-color:white;border:outset 10px red">
+<div id="house">
+<div id="safetybar"></div><div style="position:absolute;top:90px; left:10px;color:red; font: bold 20px Helvetica">Safety Level</div>
+<div id="fridgehouse" style="position:fixed;top:100px;"></div>
+<div id="stovehouse" style="position:fixed;top:-50px; left:300px"></div>
+<div id="wmachinehouse" style="position:fixed;top:20px;"></div>
+<div id="inventory" style="position:absolute;top: -10px;left:550px;height:500;width:150;background-color:white;border:outset 10px green; color: green; font:bold 15px Helvetica">
+INVENTORY
+		<div id="fridge" onclick="houseobj.moveitem('#fridge')">
+		</div>
+		<div id="stove" onclick="houseobj.moveitem('#stove')" style="">
+		</div>
+		<div id="wmachine" onclick="houseobj.moveitem('#wmachine')" style="">
 		</div>
 </div>
 	

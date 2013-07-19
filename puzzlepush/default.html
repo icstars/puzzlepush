@@ -25,7 +25,12 @@
             $("#loadingpage").fadeOut(500);
 
         });
+        $(".housepg").click(function () {
+            //always start id with hash tags
+            //always start classes with a "." javascript
+            $("#boardpage").fadeOut(500);
 
+        });
         postdate();
     });
 
@@ -47,20 +52,20 @@
 	</head>
 		<body>
 			
-            	<div id = "splashpage" style="height:700px;width:700px;position:fixed; top:10px;left:10px; z-index:2;background-color:white">
+            	<div id = "splashpage" style="height:700px;width:700px;position:fixed; top:10px;left:10px; z-index:3;background-color:white">
 				
                     <span class="imgpos">
                         <img src = "scripts/pp-button.png" style = "position:absolute;left:-10px; height: 200px; width: 200px;"/>	
                     </span>
 			
-				<!--postdate is a service call from jquery-->
+				<!--postdate is a service call from jquery(postdate() has been moved to document.ready)-->
 				<button class ="start"  style="background-color:red; color: white; font: bold 50px Helvetica">Start</button>
 				
 				
 				</div>
 
                 <!-- make this div look like a loading page -->
-				<div id="loadingpage" style="height:700px; width:400px;position:fixed; top:10px;left:10px;z-index:1;background-color:white">
+				<div id="loadingpage" style="height:700px; width:800px;position:fixed; top:10px;left:10px;z-index:2;background-color:white">
                     
                     <!-- this is the div where the tip is writ -->
                     <div id="gettrivia" align="center" style="position:fixed;top:110px;left:40px; width:400px; border:outset 10px red; color:red; font:bold 20px Helvetica">
@@ -72,13 +77,15 @@
                 </div>
 				
                 <!--Add PPproto to this div -->
-                <div id="boardpage" style="position:fixed; top:10px;left:10px;z-index:0;">
+                <div id="boardpage" style="position:fixed; top:10px;left:10px;z-index:1;background-color:white">
 
-                    <iframe src="ppproto.html" width="500" height="600" seamless></iframe>
-
+                    <iframe src="ppproto.html" width="800" height="600" seamless></iframe>
+                    <button class= "housepg" style="position:fixed;top:350px;left:400px;background-color:red; color: white; font: bold 50px Helvetica">House</button>
 
                 </div>
-				
+				<div id="housepage" style="position:fixed; top:10px; left:10px; z-index:0">
+                    <iframe src="House.html" width="1000" height="600" seamless></iframe>
+				</div>
 
 		</body>	
 </html>
