@@ -4,10 +4,10 @@
 	    $("#gettrivia").t
 	}*/
 	 
-	function getboard(){
+	/*function getboard(){
 		return postboard();
 	
-	} 
+	} */
 	//finished running this function
 	function getdate(){
 		 return new Date();

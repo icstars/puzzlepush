@@ -25,9 +25,16 @@
             $("#loadingpage").fadeOut(500);
 
         });
+        $(".load").click(function () {
+            //always start id with hash tags
+            //always start classes with a "." javascript
+            getboard(1);//Id is the arg for getboard
+
+        });
         $(".housepg").click(function () {
             //always start id with hash tags
             //always start classes with a "." javascript
+            postboard(2);//playerId is the arg for postboard
             $("#boardpage").fadeOut(500);
 
         });
@@ -60,6 +67,7 @@
 			
 				<!--postdate is a service call from jquery(postdate() has been moved to document.ready)-->
 				<button class ="start"  style="background-color:red; color: white; font: bold 50px Helvetica">Start</button>
+				<button class ="load"  style="position:absolute;top:500px;left:175px;background-color:red; color: white; font: bold 50px Helvetica">Load</button>
 				
 				
 				</div>
@@ -72,7 +80,7 @@
                         
                     </div>
                     
-                    <button class= "board" onclick ="postboard()" style="position:fixed;top:410px;left:170px;background-color:red; color: white; font: bold 50px Helvetica">Board</button>
+                    <button class= "board" style="position:fixed;top:410px;left:170px;background-color:red; color: white; font: bold 50px Helvetica">Board</button>
 				
                 </div>
 				

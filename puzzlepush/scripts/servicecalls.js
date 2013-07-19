@@ -34,10 +34,10 @@ function getsafetytip() {
         }
     });
 }
+/*postboard takes playerId and saves an array of the gameboard*/
+function postboard(playerId) {
 
-function postboard() {
-    //= new Array()[["1", "2", "3","4", "5"], ["6", "7", "8", "9", "10"], ["11", "12", "13", "14", "15"], ["16", "17", "18", "19", "20"], ["21", "22", "23", "24", "25"]];
-
+    /*
     var theboard = new Array(5);
     for (k = 0; k < 5; k++) {
         theboard[k] = new Array(5);
@@ -51,33 +51,36 @@ function postboard() {
         }
     }
     console.log(theboard);
-    console.log(theboard[0][1]);
+    console.log(theboard[0][1]); */
+
+    if (!playerId)
+        playerId = 1;
+    var theboard = gettilearray();
+    var board = { playerid: playerId , arrayboard: theboard };
 
     $.ajax({
         type: "POST",
         url: "api/Board",
-        data: JSON.stringify({arrayboard:theboard}),
+        data: JSON.stringify(board),
         contentType: "application/json",
         dataType: "json",
         success: function (msg) {
-            //boardpage();
             console.log("success");
         }
     });
 }
 
-/*function postdate() {
-    var thedate = new Date();
-    //var thedata = '{ "datestring":"' + thedate + '" }';
-    //console.log(thedata);
+function getboard(Id) {
+    
     $.ajax({
-        type: "POST",
-        url: "play.aspx/datetest",
-        data: JSON.stringify({datestring:thedate}),
-        processData: false,
+        type: "GET",
+        url: "api/Board/"+Id,
         contentType: "application/json",
-        success: function (msg) {
-            console.log(msg.d);
+        dataType: "json",
+        success: function (result) {
+            return result;
+            console.log("success");
+            console.log(result);
         }
     });
-}*/
+}

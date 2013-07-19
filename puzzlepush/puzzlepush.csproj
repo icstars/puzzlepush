@@ -85,7 +85,6 @@
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Register.aspx" />
     <Content Include="default.html" />
-    <Content Include="defaulttest.html" />
     <Content Include="helloworld1.html" />
     <Content Include="hw.aspx" />
     <Content Include="ppproto.html" />
@@ -145,6 +144,7 @@
     <Compile Include="Account\Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Board.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

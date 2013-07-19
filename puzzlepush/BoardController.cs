@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Web.Http;
 
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace puzzlepush
 {
@@ -20,62 +21,94 @@ namespace puzzlepush
         }
 
         // GET api/<controller>/5
-        public string Get(int id)
+        public Board Get(int id)
         {
-            return "value";
+           
+            string query = "SELECT * FROM poz1 WHERE poz_id=@poz_id";
+            SqlCommand insertname = new SqlCommand();
+            List<string> listboard = new List<string>();
+            DataSet ds = new DataSet();
+            SqlDataAdapter da;
+            var board = new Board { Id = id };
+            try
+            {
+                
+
+                
+                insertname.CommandType = CommandType.Text;
+                insertname.CommandText = query;
+
+                var conn = connect("puzzlepush");
+   
+                insertname = new SqlCommand(query, conn);
+                insertname.Parameters.Add(new SqlParameter("@poz_id", id));
+                
+                da = new SqlDataAdapter(query, conn);
+                da.Fill(ds, "loadboard");
+                DataTable dt = new DataTable();
+                dt = ds.Tables["loadboard"];
+                
+                conn.Close();
+
+                List<string> stringlist = new List<string>();
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    string s = (string)dt.Rows[i]["loadboard"];
+                    stringlist.Add(s);
+
+                }
+
+                //makes a 2D array and adds a random element from the dataTable List to it
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        String n = stringlist[i];
+                        board.arrayboard[i, j] = n;
+                    };
+                }
+            }
+
+            catch (Exception ex)
+            {
+                //json = JsonConvert.SerializeObject("saveboard" + ex);
+                Debug.WriteLine(ex.Message);
+                
+            }
+
+            return board;            
         }
 
         // POST api/<controller>
-        public void Post(SerialArray array)
+        public void Post(Board board)
         {
-            Console.Write("hello");
-            //string json;
-            string query = "";
-            SqlCommand insertname = new SqlCommand();
+            
             List<string> listboard = new List<string>();
 
             try
             {
-                foreach (string image in array.arrayboard)
+                foreach (string image in board.arrayboard)
                 {
                     listboard.Add(image);
                 }
-                string header = "INSERT INTO poz ";
-                string cols = "(poz0";
-                string vals = "VALUES (@" + listboard[0] + "";
-
-                for (int i = 1; i < listboard.Count; i++)
-                {
-                    cols += ",poz" + i;
-                    vals += ",@" + listboard[i] + "";
-                }
-                cols += ") ";
-                vals += ")";
-
-                query = header + cols + vals;
-                insertname.CommandType = CommandType.Text;
-                insertname.CommandText = query;
-
-
-
+                
                 var conn = connect("puzzlepush");
-                insertname = new SqlCommand(query, conn);
+                SqlCommand insertname = new SqlCommand("insertboard", conn);
+                insertname.CommandType = CommandType.StoredProcedure;
                 Debug.Write(insertname);  
-
+                insertname.Parameters.Add(new SqlParameter("@P_id",board.playerid));
                 for (int k = 0; k < listboard.Count; k++)
                 {
-                    string valparm = "@" + k + "";
+                    string valparm = "@poz" + k + "";
                     //insertname.Parameters.AddWithValue(valparm, listboard[k]);
 
                     insertname.Parameters.Add(new SqlParameter(valparm, listboard[k]));
                 }
 
                 
-                //int recordsin = insertname.ExecuteNonQuery();
-
+                var boardID  = insertname.ExecuteScalar();
+                board.Id = Convert.ToInt32(boardID);
                 conn.Close();
-
-                //json = JsonConvert.SerializeObject(insertname);
 
             }
             catch (Exception ex)
