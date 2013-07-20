@@ -1,0 +1,506 @@
+<html>
+<title>Puzzle Push</title>
+<head>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script src="http://code.jquery.com/jquery-1.7.2.min.js "></script>
+<link rel="stylesheet" type="text/css" href="puzzlepush.css">
+<script>
+
+
+
+$(document).ready(function(){
+
+//ALL OF THIS WAS ADDED BY LS ===============================================================
+    
+	//INITIALIZATION AREA :
+	
+	//CHANGES MADE ON 07162013
+	$("body").append('<div id = "gamefield"></div><div id = "marker"></div><div id = "handbar"></div><div id = "tilebox"></div>').css({"background-color":"black","margin":"0"});
+	$("body").append('<div id= "image1"></div><div id= "image2"></div><div id= "image2"></div><div id= "image3"></div><div id= "image4"></div><div id= "image5"></div>')	
+	
+    $("#marker").css({"width":"300px","height":"52px","border":"5px solid white","position":"absolute"}); 
+	
+	//CHANGES MADE ON 07162013 :
+	$("#handbar").css({"width":"300px","height": "63px","position": "relative","border": "4px solid green","top": "350px","left": "5px"});
+	
+	$("#handbar").append('<div id = "handbarSpace0"></div><div id = "handbarSpace1"></div><div id = "handbarSpace2"></div>');
+	$("#handbar").append('<div id = "handbarSpace3"></div><div id = "handbarSpace4">');
+	
+	//DEFINE SOME OF THE ARRAYS AND PROPERTIES HERE :
+	
+	var tilePlacementArray = new Array(); //THE PLAYERS HAND....
+
+	var randomNumGenerator = 0;
+	
+	//THIS SHOULD BE SET UP IN AN ARRAY BECAUSE IT'S NEVER A GOOD IDEA TO HARD CODE NUMBERS FOR LOCATIONS, ETC.
+	//THIS WAS DONE AS A SHORTCUT TO SAVE TIME, AS THIS IS ONLY A PROTOTYPE.
+	
+	//HANDBAR SPACES....  ALSO MAKE THEM DROPPABLE SPOTS :
+	
+	//SET UP THE SPACES ON THE HANDBAR TO MOVE THE TILES.  INCLUDE AN "NUMBER" FOR THE SPACE TO BE OCCUPIED BY A TILE....
+	
+	$("#handbarSpace0").css({"width":"50px","height":"50px","position":"absolute","border":"2px solid green","top":"5px","left":"5px"});
+	$("#handbarSpace0").data('spaceNum', 0);
+	$("#handbarSpace0").droppable({ tolerance: "touch",
+      								drop:handleDrop,
+									out:handleOut
+									});
+									
+	
+	$("#handbarSpace1").css({"width":"50px","height":"50px","position":"absolute","border":"2px solid green","top":"5px","left":"65px"});
+	$("#handbarSpace1").data('spaceNum', 1);
+	$("#handbarSpace1").droppable({ tolerance: "touch",
+      								drop:handleDrop,
+									out:handleOut
+									});
+	
+	$("#handbarSpace2").css({"width":"50px","height":"50px","position":"absolute","border":"2px solid green","top":"5px","left":"125px"});
+	$("#handbarSpace2").data('spaceNum', 2);
+	$("#handbarSpace2").droppable({ tolerance: "touch",
+      								drop:handleDrop,
+									out:handleOut
+									});
+	
+	$("#handbarSpace3").css({"width":"50px","height":"50px","position":"absolute","border":"2px solid green","top":"5px","left":"185px"});
+	$("#handbarSpace3").data('spaceNum', 3);
+	$("#handbarSpace3").droppable({ tolerance: "touch",
+      								drop:handleDrop,
+									out:handleOut
+									});
+	
+	$("#handbarSpace4").css({"width":"50px","height":"50px","position":"absolute","border":"2px solid green","top":"5px","left":"245px"});
+	$("#handbarSpace4").data('spaceNum', 4);
+	$("#handbarSpace4").droppable({ tolerance: "touch",
+      								drop:handleDrop,
+									out:handleOut
+									});
+	
+	$("#tilebox").css({"width":"300px","height": "125px","position": "relative","border": "4px solid green","top": "365px","left": "5px"});
+	$("#tilebox").droppable({ tolerance: "touch" });
+	//I WILL LOOP THIS ONE.  MAKES THIS A LITTLE EASIER TO WORK WITH....
+	
+	var horizPlacementTracker = 0; //TRACKS THE HORIZONTAL PLACEMENT OF THE TILES.
+	
+    var bgImages=new Array("images/fire22.png","images/fridge42.png","images/plugs3.png","images/stove41.png","images/washmach42.png");
+	var imgArray = new Array("image1","image2","image3","image4","image5");
+	
+//===============================================================================================================
+	
+	for (tileBoxCount=0;tileBoxCount<10;tileBoxCount++) {
+	
+		randomNumGenerator = Math.floor(Math.random()*5);
+		    	
+		$("#tilebox").append('<div class = "tileSpace" id = "tileSpace'+tileBoxCount+'"></div>');	
+		
+		$("#tilebox").append('<div class = "tileBoxSpace" id = "tileBoxSpace'+tileBoxCount+'"></div>');
+		
+//======================================================================================================================
+		
+		$("#tileBoxSpace"+tileBoxCount).css({"width":"50px","height":"50px","position":"absolute","border":"2px solid green","top":5+(60*parseInt(tileBoxCount/5)),"left":(60*horizPlacementTracker+5)+"px"});	
+		$("#tileBoxSpace"+tileBoxCount).droppable({ tolerance: "touch",
+										drop:handleDrop,
+										out:handleOut
+										});
+
+//======================================================================================================================		
+		
+		$("#tileSpace"+tileBoxCount).css({"cursor":"pointer","width":"50px","height":"50px","position":"absolute","border":"2px solid green","top":5+(60*parseInt(tileBoxCount/5)),"left":(60*horizPlacementTracker+5)+"px"});
+		$("#tileSpace"+tileBoxCount).css('background-image', 'url(' + bgImages[randomNumGenerator] + ')');
+		$("#tileSpace"+tileBoxCount).css("z-index","1");	
+		$("#tileSpace"+tileBoxCount).data('tileNum', randomNumGenerator);
+		$("#tileSpace"+tileBoxCount).draggable({ revert : "invalid" });
+		
+		//START THE NEXT ROW AFTER THE PLACEMENT OF THE 5TH TILESPACE....
+		
+		//NEXT, PLACE THE RANDOM TILES IN EACH OF THE TILE SPACES. MAKE SURE THAT THEY CAN BE DRAGGED TO DIFFERENT LOCATIONS AND IF
+		//THEY ARE NOT DRAGGED TO THE CORRECT PLACE WHERE THEY CAN BE DROPPED, MAKE SURE THAT THEY CAN REVERT BACK FROM WHENCE THEY CAME....		
+
+		$("#tileBox").append('<div class = "tile" id = "tile'+tileBoxCount+'"></div>');	
+		
+		if (horizPlacementTracker == 4) horizPlacementTracker = 0;
+		else horizPlacementTracker++;	
+	
+	} //END OF FOR LOOP.
+
+//=============================================================================================================	
+	
+	  var selectedRow=-1
+      var selectedCol=-1
+      var posX;
+      var posY;
+      var tiles=new Array();
+      var movingItems=0;
+      var gameState="pick"; 
+	  //var gameState="array"; //GAME STATE SWITCH 07162013
+	  
+	  
+	  
+	  //SET UP COLORS AND INITIALIZE GAMEPLAY ARRAY :
+	  
+	  //CODE BELOW HAS BEEN SLIGHTLY MODIFIED.
+      //var bgColors=new Array("magenta","mediumblue","yellow","lime","cyan","orange","crimson","gray");
+	  
+      for(i=0;i<5;i++){
+             tiles[i]=new Array();
+             for(j=0;j<5;j++){
+                  tiles[i][j]=-1;
+             }
+      }
+	  
+	//DISPLAY GAME GRID :
+	
+    for(i=0;i<5;i++){
+        for(j=0;j<5;j++){
+            do{
+                tiles[i][j]=Math.floor(Math.random()*5);
+            }while(isStreak(i,j));
+            $("#gamefield").app
+			end('<div class = "tile" id = "tile_'+i+'_'+j+'"></div>');
+            $("#tile_"+i+"_"+j).css({"top":(i*60)+10+"px","left":(j*60)+10+"px","width":"50px","height":"50px","position":"absolute","border":"1px solid white","cursor":"pointer","background-image":"url('"+bgImages[tiles[i][j]]+"')"}); //CHANGE MADE 07162013
+			//console.log("FILE="+bgImages[tiles[i][j]]+".");
+        }
+    }
+
+	//USER MAKES MOVES :
+    $("#marker").css("top",posY-5).css("left",5).hide();	
+
+//USER MOVE 	
+	$(document).on("click",".tile",function() {	
+		if(gameState=="pick"){ 
+            posY=$(this).position().top;
+            posX=$(this).position().left;
+            $("#marker").show();
+			$("#marker").css("top",posY-5).css("left",5); //CHANGE MADE 07162013
+            
+            selectedRow=parseInt((posY-10)/50);
+		
+			changeRow();	
+			
+			console.log("selectedRow"+selectedRow);
+		} //END OF IF....
+		
+	});
+	function printBoard(){
+	    var rowvals = "";
+		for(r=0;r<5;r++){
+				rowvals="";
+			for(c=0;c<5;c++){
+				rowvals+=tiles[r][c]+" ";
+			}
+			console.log(rowvals);
+		}
+	}
+	//CHANGE THE ARRAY OF THE SELECTED ROW....
+		
+	function changeRow() {
+		for (i = 0;i<5;i++) {
+			 tiles[selectedRow][i] = tilePlacementArray[i];
+			 changepic(selectedRow,i,tilePlacementArray[i]);
+			 console.log(selectedRow+" C "+i);
+		} //End of loop....
+		printBoard();
+	for(i=0;i<5;i++){
+		if(isStreak(selectedRow,i)){
+		removeTiles(selectedRow,i);
+		}
+	}
+		tileFade();
+		gameState="remove";
+		checkMoving();
+	} //End of function changeRow....
+	
+	//LOOK FOR MATCH....
+	
+	function checkForMatch() {
+	
+	
+	} //End of function checkForMatch.
+		
+	//CHECK THE USERS' MOVES :
+	
+	//====================================================================================
+
+	function handleDrop(event, ui) {
+	
+		ui.draggable.position( { of: $(this), my: 'left top', at: 'left top' } );
+		console.log(">>"+$(this).data('spaceNum')+"  "+ui.draggable.data('tileNum'));
+		tilePlacementArray[$(this).data('spaceNum')] = ui.draggable.data('tileNum');		
+	
+	} //End of function handleDrop.
+	
+	//....................................................................................
+	
+	function handleOut(event, ui) { 
+			//tilePlacementArray[$(this).data('spaceNum')] = -1;
+             //console.log(">>"+tilePlacementArray[$(this).data('spaceNum')]);	
+			 }
+	
+	//====================================================================================
+	
+	//OLD BEJEWELED CODE....
+ 
+    function checkMoving(){
+        movingItems--;
+            if(movingItems==0){
+                switch(gameState){
+                    case "revert":
+                    case "switch":
+                          if(!isStreak(selectedRow,selectedCol) && !isStreak(posY,posX)){
+                           if(gameState!="revert"){
+                            gameState="revert";
+                               tileSwitch();
+                           }
+                           else{
+                            gameState="pick";
+                            selectedRow=-1;    
+                        }
+                        }    
+                    else{
+                        gameState="remove";
+                            if(isStreak(selectedRow,selectedCol)){
+                                removeTiles(selectedRow,selectedCol);
+                        }
+                            if(isStreak(posY,posX)){
+                                removeTiles(posY,posX);
+                        }
+                        tileFade();
+                    }
+                    break;
+                case "remove":
+                    checkFalling();
+                    break;
+                case "refill":
+                    placeNewGems();
+                    break;
+            }
+        }
+    }
+	
+	//========================================================================
+    
+    function placeNewGems(){
+        var tilesPlaced = 0;
+        for(i=0;i<5;i++){
+            if(tiles[0][i]==-1){
+                tiles[0][i]=Math.floor(Math.random()*5);
+                  $("#gamefield").append('<div class = "tile" id = "tile_0_'+i+'"></div>');
+                  $("#tile_0_"+i).css({"top":"10px","left":(i*60)+10+"px","width":"50px","height":"50px","position":"absolute","border":"1px solid white","cursor":"pointer","background-image":"url('"+bgImages[tiles[0][i]]+"')"});
+                  tilesPlaced++;
+            }
+        }
+        if(tilesPlaced){
+            gameState="remove";
+            checkFalling();
+        }
+        else{
+            var combo=0
+            for(i=0;i<5;i++){
+                  for(j=0;j<5;j++){
+                      if(j<=2 && tiles[i][j]==tiles[i][j+1] && tiles[i][j]==tiles[i][j+2]){
+                        combo++;
+                        removeTiles(i,j);     
+                    }
+                    if(i<=2 && tiles[i][j]==tiles[i+1][j] && tiles[i][j]==tiles[i+2][j]){
+                        combo++;
+                        removeTiles(i,j);     
+                    }             
+                }
+            }
+            if(combo>0){
+                gameState="remove";
+                tileFade();
+            }        
+            else{
+                gameState="pick";
+                selectedRow=-1;
+            }
+        }
+    }
+    
+    function checkFalling(){
+        var fellDown=0;
+        for(j=0;j<5;j++){
+            for(i=4;i>0;i--){
+                if(tiles[i][j]==-1 && tiles[i-1][j]>=0){
+                    $("#tile_"+(i-1)+"_"+j).addClass("fall").attr("id","tile_"+i+"_"+j);
+                    tiles[i][j]=tiles[i-1][j];
+                    tiles[i-1][j]=-1;
+                    fellDown++;
+                }
+            }
+        }
+        $.each($(".fall"),function(){
+            movingItems++;
+            $(this).animate({
+                top: "+=60"
+                },{
+                duration: 500,
+                complete: function(){
+                    $(this).removeClass("fall");
+                    checkMoving();
+                }
+            });
+        });     
+        if(fellDown==0){
+            gameState="refill";
+            movingItems=1;
+            checkMoving();    
+        }    
+    }
+    
+    function tileFade(){
+        $.each($(".remove"),function(){
+            movingItems++;
+            $(this).animate({
+                opacity:0
+                },{
+                duration: 500,
+                complete: function(){
+                    $(this).remove();
+                    checkMoving();
+                }
+            });
+        });
+    }
+ 
+    function tileSwitch(){
+        var yOffset=selectedRow-posY;
+        var xOffset=selectedCol-posX;
+        $("#tile_"+selectedRow+"_"+selectedCol).addClass("switch").attr("dir","-1");
+        $("#tile_"+posY+"_"+posX).addClass("switch").attr("dir","1");
+        $.each($(".switch"),function(){
+            movingItems++;
+            $(this).animate({
+                left: "+="+xOffset*60*$(this).attr("dir"),
+                top: "+="+yOffset*60*$(this).attr("dir")
+                },{
+                duration: 500,
+                complete: function(){
+                    checkMoving();
+                }
+            }).removeClass("switch")
+        });
+		
+        $("#tile_"+selectedRow+"_"+selectedCol).attr("id","temp");
+        $("#tile_"+posY+"_"+posX).attr("id","tile_"+selectedRow+"_"+selectedCol);
+        $("#temp").attr("id","tile_"+posY+"_"+posX);
+        var temp=tiles[selectedRow][selectedCol];
+        tiles[selectedRow][selectedCol]=tiles[posY][posX];
+        tiles[posY][posX]=temp;
+    }
+    
+    function removeTiles(row,col){
+        var tileValue = tiles[row][col];
+        var tmp = row;
+		console.log(row+" R"+col);
+        $("#tile_"+row+"_"+col).addClass("remove");
+		
+	//CHECK TO SEE IF THERE IS A MATCH DIAGONALLY
+	
+	//CHANGES MADE 07142013
+
+//END OF OLD BEJEWELED CODE
+		
+		
+        if(isVerticalStreak(row,col)){
+            while(tmp>0 && tiles[tmp-1][col]==tileValue){                          
+                $("#tile_"+(tmp-1)+"_"+col).addClass("remove");
+				console.log(row+"V "+col);
+                tiles[tmp-1][col]=-1;
+                tmp--;
+            }
+            tmp=row;
+            while(tmp<4 && tiles[tmp+1][col]==tileValue){
+                $("#tile_"+(tmp+1)+"_"+col).addClass("remove");
+                console.log(row+"V "+col);
+				tiles[tmp+1][col]=-1;
+                tmp++;
+            }
+        }
+		
+        if(isHorizontalStreak(row,col)){
+            tmp = col;
+            while(tmp>0 && tiles[row][tmp-1]==tileValue){
+                $("#tile_"+row+"_"+(tmp-1)).addClass("remove");
+                console.log(row+"H "+col);
+				tiles[row][tmp-1]=-1;
+                tmp--;
+            }
+            tmp=col;
+            while(tmp<4 && tiles[row][tmp+1]==tileValue){
+                $("#tile_"+row+"_"+(tmp+1)).addClass("remove");
+               	console.log(row+"H "+col);
+				tiles[row][tmp+1]=-1;
+                tmp++;
+            }
+        }
+		
+		//DIAGONALLY
+		//CHANGES MADE 07142013
+		
+		
+        tiles[row][col]=-1;
+    }
+    
+	//CHECK TO SEE IF THERE IS A MATCH VERTICALLY.
+	
+    function isVerticalStreak(row,col){
+        var tileValue=tiles[row][col];
+        var streak=0;
+        var tmp=row;
+        while(tmp>0 && tiles[tmp-1][col]==tileValue){
+            streak++;
+            tmp--;
+        }
+        tmp=row;
+        while(tmp<4 && tiles[tmp+1][col]==tileValue){
+            streak++;
+            tmp++;
+        }
+        return streak>1
+    }
+	
+	//CHECK TO SEE IF THERE IS A MATCH HORIZONTALLY
+    
+    function isHorizontalStreak(row,col){
+        var tileValue=tiles[row][col];
+        var streak=0;
+        var tmp=col
+        while(tmp>0 && tiles[row][tmp-1]==tileValue){
+            streak++;
+            tmp--;
+        }
+        tmp=col;
+        while(tmp<4 && tiles[row][tmp+1]==tileValue){
+            streak++;
+            tmp++;
+        }
+        return streak>1
+    }
+	
+	
+	
+	//RETURN "TRUE" IF THERE ARE MATCHES....
+    
+    function isStreak(row,col){
+		var vertical = isVerticalStreak(row,col);
+		console.log("Vstreak"+row+col+vertical);
+        return isVerticalStreak(row,col)||isHorizontalStreak(row,col);
+    } 
+	
+	function changepic(row,col,val){ 
+		console.log(bgImages[tiles[row][col]]);
+		console.log("val"+val);
+		$("#tile_" + row +"_"+col).css({"background-image":"url('"+bgImages[tiles[row][col]]+"')"});
+		 
+		}
+  
+});
+</script>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+</head>
+</html>
