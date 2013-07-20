@@ -155,8 +155,7 @@ $(document).ready(function(){
             do{
                 tiles[i][j]=Math.floor(Math.random()*5);
             }while(isStreak(i,j));
-            $("#gamefield").app
-			end('<div class = "tile" id = "tile_'+i+'_'+j+'"></div>');
+            $("#gamefield").append('<div class = "tile" id = "tile_'+i+'_'+j+'"></div>');
             $("#tile_"+i+"_"+j).css({"top":(i*60)+10+"px","left":(j*60)+10+"px","width":"50px","height":"50px","position":"absolute","border":"1px solid white","cursor":"pointer","background-image":"url('"+bgImages[tiles[i][j]]+"')"}); //CHANGE MADE 07162013
 			//console.log("FILE="+bgImages[tiles[i][j]]+".");
         }
