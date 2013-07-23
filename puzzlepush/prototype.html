@@ -4,12 +4,111 @@
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script src="http://code.jquery.com/jquery-1.7.2.min.js "></script>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
 <link rel="stylesheet" type="text/css" href="puzzlepush.css">
 <script>
 
 
 
-$(document).ready(function(){
+$(document).ready(function(){(function ($) {
+    // Detect touch support
+    $.support.touch = 'ontouchend' in document;
+    // Ignore browsers without touch support
+    if (!$.support.touch) {
+    return;
+    }
+    var mouseProto = $.ui.mouse.prototype,
+        _mouseInit = mouseProto._mouseInit,
+        touchHandled;
+
+    function simulateMouseEvent (event, simulatedType) { //use this function to simulate mouse event
+    // Ignore multi-touch events
+        if (event.originalEvent.touches.length > 1) {
+        return;
+        }
+    event.preventDefault(); //use this to prevent scrolling during ui use
+
+    var touch = event.originalEvent.changedTouches[0],
+        simulatedEvent = document.createEvent('MouseEvents');
+    // Initialize the simulated mouse event using the touch event's coordinates
+    simulatedEvent.initMouseEvent(
+        simulatedType,    // type
+        true,             // bubbles                    
+        true,             // cancelable                 
+        window,           // view                       
+        1,                // detail                     
+        touch.screenX,    // screenX                    
+        touch.screenY,    // screenY                    
+        touch.clientX,    // clientX                    
+        touch.clientY,    // clientY                    
+        false,            // ctrlKey                    
+        false,            // altKey                     
+        false,            // shiftKey                   
+        false,            // metaKey                    
+        0,                // button                     
+        null              // relatedTarget              
+        );
+
+    // Dispatch the simulated event to the target element
+    event.target.dispatchEvent(simulatedEvent);
+    }
+    mouseProto._touchStart = function (event) {
+    var self = this;
+    // Ignore the event if another widget is already being handled
+    if (touchHandled || !self._mouseCapture(event.originalEvent.changedTouches[0])) {
+        return;
+        }
+    // Set the flag to prevent other widgets from inheriting the touch event
+    touchHandled = true;
+    // Track movement to determine if interaction was a click
+    self._touchMoved = false;
+    // Simulate the mouseover event
+    simulateMouseEvent(event, 'mouseover');
+    // Simulate the mousemove event
+    simulateMouseEvent(event, 'mousemove');
+    // Simulate the mousedown event
+    simulateMouseEvent(event, 'mousedown');
+    };
+
+    mouseProto._touchMove = function (event) {
+    // Ignore event if not handled
+    if (!touchHandled) {
+        return;
+        }
+    // Interaction was not a click
+    this._touchMoved = true;
+    // Simulate the mousemove event
+    simulateMouseEvent(event, 'mousemove');
+    };
+    mouseProto._touchEnd = function (event) {
+    // Ignore event if not handled
+    if (!touchHandled) {
+        return;
+    }
+    // Simulate the mouseup event
+    simulateMouseEvent(event, 'mouseup');
+    // Simulate the mouseout event
+    simulateMouseEvent(event, 'mouseout');
+    // If the touch interaction did not move, it should trigger a click
+    if (!this._touchMoved) {
+      // Simulate the click event
+      simulateMouseEvent(event, 'click');
+    }
+    // Unset the flag to allow other widgets to inherit the touch event
+    touchHandled = false;
+    };
+    mouseProto._mouseInit = function () {
+    var self = this;
+    // Delegate the touch handlers to the widget's element
+    self.element
+        .on('touchstart', $.proxy(self, '_touchStart'))
+        .on('touchmove', $.proxy(self, '_touchMove'))
+        .on('touchend', $.proxy(self, '_touchEnd'));
+
+    // Call the original $.ui.mouse init method
+    _mouseInit.call(self);
+    };
+})(jQuery);
 
 //ALL OF THIS WAS ADDED BY LS ===============================================================
     
@@ -82,14 +181,14 @@ $(document).ready(function(){
 	
 	var horizPlacementTracker = 0; //TRACKS THE HORIZONTAL PLACEMENT OF THE TILES.
 	
-    var bgImages=new Array("images/fire22.png","images/fridge42.png","images/plugs3.png","images/stove41.png","images/washmach42.png");
-	var imgArray = new Array("image1","image2","image3","image4","image5");
+    var bgImages=new Array("fire22.png","fridge42.png","plugs3.png","stove41.png","washmach42.png");
+	/*var imgArray = new Array("image1","image2","image3","image4","image5");*/
 	
 //===============================================================================================================
 	
 	for (tileBoxCount=0;tileBoxCount<10;tileBoxCount++) {
 	
-		randomNumGenerator = Math.floor(Math.random()*5);
+		randomNumGenerator = Math.floor(Math.random()*4);
 		    	
 		$("#tilebox").append('<div class = "tileSpace" id = "tileSpace'+tileBoxCount+'"></div>');	
 		
@@ -176,7 +275,7 @@ $(document).ready(function(){
 		
 			changeRow();	
 			
-			console.log("selectedRow"+selectedRow);
+			/*console.log("selectedRow"+selectedRow);*/
 		} //END OF IF....
 		
 	});
@@ -196,9 +295,10 @@ $(document).ready(function(){
 		for (i = 0;i<5;i++) {
 			 tiles[selectedRow][i] = tilePlacementArray[i];
 			 changepic(selectedRow,i,tilePlacementArray[i]);
-			 console.log(selectedRow+" C "+i);
+			/* console.log(selectedRow+" C "+i);*/
 		} //End of loop....
 		printBoard();
+		
 	for(i=0;i<5;i++){
 		if(isStreak(selectedRow,i)){
 		removeTiles(selectedRow,i);
@@ -207,6 +307,7 @@ $(document).ready(function(){
 		tileFade();
 		gameState="remove";
 		checkMoving();
+		console.log("done");
 	} //End of function changeRow....
 	
 	//LOOK FOR MATCH....
@@ -363,7 +464,7 @@ $(document).ready(function(){
         });
     }
  
-    function tileSwitch(){
+   /* function tileSwitch(){
         var yOffset=selectedRow-posY;
         var xOffset=selectedCol-posX;
         $("#tile_"+selectedRow+"_"+selectedCol).addClass("switch").attr("dir","-1");
@@ -387,7 +488,7 @@ $(document).ready(function(){
         var temp=tiles[selectedRow][selectedCol];
         tiles[selectedRow][selectedCol]=tiles[posY][posX];
         tiles[posY][posX]=temp;
-    }
+    }*/
     
     function removeTiles(row,col){
         var tileValue = tiles[row][col];
@@ -403,6 +504,7 @@ $(document).ready(function(){
 		
 		
         if(isVerticalStreak(row,col)){
+			tmp=row;
             while(tmp>0 && tiles[tmp-1][col]==tileValue){                          
                 $("#tile_"+(tmp-1)+"_"+col).addClass("remove");
 				console.log(row+"V "+col);
@@ -422,7 +524,7 @@ $(document).ready(function(){
             tmp = col;
             while(tmp>0 && tiles[row][tmp-1]==tileValue){
                 $("#tile_"+row+"_"+(tmp-1)).addClass("remove");
-                console.log(row+"H "+col);
+               console.log(row+"H "+col);
 				tiles[row][tmp-1]=-1;
                 tmp--;
             }
@@ -433,6 +535,7 @@ $(document).ready(function(){
 				tiles[row][tmp+1]=-1;
                 tmp++;
             }
+			
         }
 		
 		//DIAGONALLY
@@ -490,7 +593,7 @@ $(document).ready(function(){
 	
 	function changepic(row,col,val){ 
 		console.log(bgImages[tiles[row][col]]);
-		console.log("val"+val);
+		/*console.log("val"+val);*/
 		$("#tile_" + row +"_"+col).css({"background-image":"url('"+bgImages[tiles[row][col]]+"')"});
 		 
 		}
@@ -503,3 +606,4 @@ $(document).ready(function(){
 
 </head>
 </html>
+
