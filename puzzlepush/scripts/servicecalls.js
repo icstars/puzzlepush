@@ -22,7 +22,7 @@ function postscore(){
     	$.ajax({
 		type: "POST",
 	    	url: "api/score",
-	    	data: JSON.stringify({scorestring: "100"}),
+	    	data: JSON.stringify({scorestring: currentscore}),
 	    	contentType: "application/json",
 	    	success: function (msg) {
 	        console.log(msg.d);
