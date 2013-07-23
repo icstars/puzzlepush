@@ -16,7 +16,19 @@ function postdate() {
     });
 }
 
-/* ajax call which gets the trivia question from the server */
+function postscore(){
+//var thescore= ();
+    	$.ajax({
+			type: "POST",
+	    	url: "api/score",
+	    	data: JSON.stringify({scorestring: "100"}),
+	    	contentType: "application/json",
+	    	success: function (msg) {
+	        console.log(msg.d);
+	    	}
+		});
+}
+/* ajax call which gets the trivia question from the server 
 function getsafetytip() {
     $.ajax({
         type: "POST",
@@ -33,7 +45,8 @@ function getsafetytip() {
             console.log(err);
         }
     });
-}
+} */
+
 /*postboard takes playerId and saves an array of the gameboard*/
 function postboard(playerId) {
 
