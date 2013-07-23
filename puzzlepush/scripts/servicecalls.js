@@ -18,8 +18,7 @@ function postdate() {
 
 /* ajax call which posts the score to the server*/
 function postscore(score){
-//var thescore= ();
-    	$.ajax({
+		$.ajax({
 		type: "POST",
 	    	url: "api/score",
 	    	data: JSON.stringify({thescore: score}),
