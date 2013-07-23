@@ -181,7 +181,7 @@ $(document).ready(function(){(function ($) {
 	
 	var horizPlacementTracker = 0; //TRACKS THE HORIZONTAL PLACEMENT OF THE TILES.
 	
-    var bgImages=new Array("fire22.png","fridge42.png","plugs3.png","stove41.png","washmach42.png");
+    var bgImages=new Array("Images/fire22.png","Images/fridge42.png","Images/plugs3.png","Images/stove41.png","Images/washmach42.png");
 	/*var imgArray = new Array("image1","image2","image3","image4","image5");*/
 	
 //===============================================================================================================
@@ -231,6 +231,7 @@ $(document).ready(function(){(function ($) {
       var tiles=new Array();
       var movingItems=0;
       var gameState="pick"; 
+      var currentscore=0;
 	  //var gameState="array"; //GAME STATE SWITCH 07162013
 	  
 	  
@@ -307,7 +308,9 @@ $(document).ready(function(){(function ($) {
 		tileFade();
 		gameState="remove";
 		checkMoving();
-		console.log("done");
+		console.log("done matching;"+currentscore);
+        //call postscore
+        //postscore(currentscore);
 	} //End of function changeRow....
 	
 	//LOOK FOR MATCH....
@@ -387,6 +390,8 @@ $(document).ready(function(){(function ($) {
                   $("#gamefield").append('<div class = "tile" id = "tile_0_'+i+'"></div>');
                   $("#tile_0_"+i).css({"top":"10px","left":(i*60)+10+"px","width":"50px","height":"50px","position":"absolute","border":"1px solid white","cursor":"pointer","background-image":"url('"+bgImages[tiles[0][i]]+"')"});
                   tilesPlaced++;
+                  currentscore++;
+
             }
         }
         if(tilesPlaced){
@@ -414,6 +419,8 @@ $(document).ready(function(){(function ($) {
             else{
                 gameState="pick";
                 selectedRow=-1;
+                 console.log("score"+currentscore);
+                 postscore(currentscore);
             }
         }
     }
