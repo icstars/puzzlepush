@@ -16,10 +16,11 @@ function postdate() {
     });
 }
 
+/* ajax call which posts the score to the server*/
 function postscore(){
 //var thescore= ();
     	$.ajax({
-			type: "POST",
+		type: "POST",
 	    	url: "api/score",
 	    	data: JSON.stringify({scorestring: "100"}),
 	    	contentType: "application/json",
