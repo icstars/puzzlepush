@@ -82,7 +82,7 @@ function postboard(playerId) {
 
     $.ajax({
         type: "POST",
-        url: "api/Score",
+        url: "play.aspx/saveboard",
         data: JSON.stringify(data),
         contentType: "application/json",
         dataType: "json",
@@ -97,7 +97,7 @@ function getboard(Id) {
     
     $.ajax({
         type: "GET",
-        url: "api/Board/"+Id,
+        url: "play.aspx/getboard,
         contentType: "application/json",
         dataType: "json",
         success: function (result) {

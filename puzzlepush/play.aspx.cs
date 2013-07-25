@@ -111,69 +111,104 @@ namespace puzzlepush
             return json;
         }
 
-        [WebMethod]
-        public static string saveboard(Board test)
+      /*  [WebMethod]
+        public static string postboard(Board board)
         {
             string json;
-            string query="";
-            SqlCommand insertname = new SqlCommand();
             List<string> listboard = new List<string>();
 
             try
             {
-                foreach(string image in test.arrayboard)
+                foreach (string image in board.arrayboard)
                 {
                     listboard.Add(image);
                 }
-                string header = "INSERT INTO poz ";
-                string cols = "(poz0";
-                string vals = "VALUES ('@" + listboard[0] + "'";
-
-                for (int i = 1; i < listboard.Count; i++)
-                {   
-                    cols += ",poz" + i;
-                    vals += ",'@" + listboard[i] + "'";
-                }
-                cols += ") ";
-                vals += ")";
                 
-                query = header + cols + vals;
-                insertname.CommandType = CommandType.Text;
-                insertname.CommandText = query;
-                
-                
-
-                
-                insertname = new SqlCommand(query, connect("puzzlepush"));
-        
-                /*for(int k = 0; k<listboard.Count;k++)
+                var conn = connect("puzzlepush");
+                SqlCommand insertname = new SqlCommand("insertboard", conn);
+                insertname.CommandType = CommandType.StoredProcedure;
+                Debug.Write(insertname);  
+                insertname.Parameters.Add(new SqlParameter("@P_id",board.playerid));
+                for (int k = 0; k < listboard.Count; k++)
                 {
                     string valparm = "@poz" + k + "";
-                    //insertname.Parameters.AddWithValue(valparm, listboard[k]);
 
                     insertname.Parameters.Add(new SqlParameter(valparm, listboard[k]));
-                }*/
-               
+                }
 
-                recordsin = insertname.ExecuteNonQuery();
                 
+                var boardID  = insertname.ExecuteScalar();
+                board.boardid = Convert.ToInt32(boardID);
                 conn.Close();
-
-                json = JsonConvert.SerializeObject(insertname);
+                json = "success";
 
             }
             catch (Exception ex)
             {
-                json = JsonConvert.SerializeObject("saveboard"+ex);
-                Debug.WriteLine(json);
-                Debug.WriteLine(recordsin);
+                json = JsonConvert.SerializeObject("postboard" + ex);
+                Debug.WriteLine(ex.Message);
+                //Console.WriteLine();
             }
-            
-            
-            return query;
 
 
+            return json;
         }
+
+        [WebMethod]
+        public Board getboard(int id)
+        {
+
+            string query = "SELECT * FROM poz1 WHERE poz_id=@poz_id";
+            SqlCommand insertname = new SqlCommand();
+            List<string> listboard = new List<string>();
+            DataSet ds = new DataSet();
+            SqlDataAdapter da;
+            var board = new Board { boardid = id };
+            try
+            {
+                insertname.CommandType = CommandType.Text;
+                insertname.CommandText = query;
+
+                var conn = connect("puzzlepush");
+
+                insertname = new SqlCommand(query, conn);
+                insertname.Parameters.Add(new SqlParameter("@poz_id", id));
+
+                da = new SqlDataAdapter(query, conn);
+                da.Fill(ds, "loadboard");
+                DataTable dt = new DataTable();
+                dt = ds.Tables["loadboard"];
+
+                conn.Close();
+
+                List<string> stringlist = new List<string>();
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    string s = (string)dt.Rows[i]["loadboard"];
+                    stringlist.Add(s);
+
+                }
+
+                //makes a 2D array from the dataTable List
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        String n = stringlist[i];
+                        board.arrayboard[i, j] = n;
+                    };
+                }
+            }
+
+            catch (Exception ex)
+            {
+                //json = JsonConvert.SerializeObject("saveboard" + ex);
+                Debug.WriteLine(ex.Message);
+
+            }
+
+            return board;
+        }*/
 
         [WebMethod]
         public static string recordscore(int id, int score)
