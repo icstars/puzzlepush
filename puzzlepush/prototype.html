@@ -4,8 +4,10 @@
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script src="http://code.jquery.com/jquery-1.7.2.min.js "></script>
+<script src="scripts/servicecalls.js"></script>
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
 <link rel="stylesheet" type="text/css" href="puzzlepush.css">
+
 <script>
 
 
@@ -231,6 +233,7 @@ $(document).ready(function(){(function ($) {
       var tiles=new Array();
       var movingItems=0;
       var gameState="pick"; 
+	  var currentscore=0;
 	  //var gameState="array"; //GAME STATE SWITCH 07162013
 	  
 	  
@@ -387,6 +390,7 @@ $(document).ready(function(){(function ($) {
                   $("#gamefield").append('<div class = "tile" id = "tile_0_'+i+'"></div>');
                   $("#tile_0_"+i).css({"top":"10px","left":(i*60)+10+"px","width":"50px","height":"50px","position":"absolute","border":"1px solid white","cursor":"pointer","background-image":"url('"+bgImages[tiles[0][i]]+"')"});
                   tilesPlaced++;
+				  currentscore++;
             }
         }
         if(tilesPlaced){
@@ -414,6 +418,7 @@ $(document).ready(function(){(function ($) {
             else{
                 gameState="pick";
                 selectedRow=-1;
+				postscore(currentscore);
             }
         }
     }

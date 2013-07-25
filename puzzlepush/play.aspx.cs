@@ -35,7 +35,7 @@ namespace puzzlepush
                 //string[,] board = new string[,] { { "1", "2", "3", "4", "5" }, { "6", "7", "8", "9", "10" }, { "11", "12", "13", "14", "15" }, { "16", "17", "18", "19", "20" }, { "21", "22", "23", "24", "25" } };
                 //string[,] board1 = arrayer();
                 //Response.Write(saveboard(board));
-                Response.Write(recordscore("45"));
+                //Response.Write(recordscore("45"));
                 //json = JsonConvert.SerializeObject(saveboard(board));
                 //Response.Write(getjson());
                 //Response.Write(recordsin.ToString());
@@ -176,29 +176,25 @@ namespace puzzlepush
         }
 
         [WebMethod]
-        public static Score recordscore(string score)
+        public static string recordscore(int id, int score)
         {
             string json;
-            var nscore = new Score { Scores = score };
+            
 
             try
             {
                 SqlConnection conn = connect("puzzlepush");
-                string insert = "INSERT INTO scores(score) VALUES(@score)";
-                SqlCommand insertname = new SqlCommand(insert, conn);
-                insertname.CommandType = CommandType.Text;
-                // gets the IP from the jQuery request
-                //string sip = HttpContext.Current.Request.UserHostAddress;
-                //json = JsonConvert.SerializeObject(sip);
-
-                // add the IP and date we get as parameters to a stored procedure
-                SqlParameter scoreparm = new SqlParameter("@score", nscore.Scores);
-                //SqlParameter ipparm = new SqlParameter("@ip", sip);
-                //insertname.Parameters.Add(ipparm);
-                insertname.Parameters.Add(scoreparm);
-                // run the stored procedure, which updates the database with user start time and IP
+            
+                SqlCommand insertname = new SqlCommand("UpdateScore", conn);
+                insertname.CommandType = CommandType.StoredProcedure;
+            
+                int playerscore = score;
+                insertname.Parameters.Add(new SqlParameter("@P_Id", id));
+                insertname.Parameters.Add(new SqlParameter("@score", score));
                 insertname.ExecuteNonQuery();
                 conn.Close();
+
+                json = "success";
             }
 
             catch (Exception ex)
@@ -207,7 +203,9 @@ namespace puzzlepush
                 json = JsonConvert.SerializeObject(ex);
                 Debug.WriteLine("recordstart" + ex.Message);
             }
-            return nscore;
+
+            return json;
+        
         }
 
 
@@ -285,7 +283,37 @@ namespace puzzlepush
 
             return json;
         }
+        [WebMethod]
+        public static string getpid()
+        {
+            string json;
+            // define a connection to the database
+            try
+            {
+                string sip = HttpContext.Current.Request.UserHostAddress;
+                json = JsonConvert.SerializeObject(sip);
+                //run an sql query and create a dataset to store the result
+                SqlDataAdapter MyAdapter = new SqlDataAdapter("select P_id from splashPage WHERE ipAddress ="+sip+"", connect("puzzlepush"));
+                DataSet ds = new DataSet();
 
+                //fill the dataset with the results from the sql query and name the table 'hw'
+
+                MyAdapter.Fill(ds, "hw");
+                //Using Newtonsoft's JSON.NET, convert our dataset object from C# to JSON (JavaScript Object Notation)
+                json = JsonConvert.SerializeObject(ds);
+                conn.Close();
+            }
+
+            catch (Exception ex)
+            {
+                //write any error messages
+                //Debug.Write(ex.Message);
+                json = JsonConvert.SerializeObject(ex);
+                Debug.WriteLine(json);
+            }
+
+            return json;
+        }
         public static SqlConnection connect(string db)
         {
             try
@@ -297,7 +325,7 @@ namespace puzzlepush
                 conn.Open();
             }
             catch (Exception ex)
-            {
+            {      
                 Debug.WriteLine(ex.Message);
             }
 

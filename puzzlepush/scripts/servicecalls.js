@@ -15,14 +15,31 @@ function postdate() {
         }
     });
 }
-
+function getplayerid() {
+    $.ajax({
+        type: "POST",
+        url: "play.aspx/getpid",
+        data: "{}",
+        contentType: "application/json",
+        dataType: "json",
+        success: function (msg) {
+            var s = JSON.parse(msg.d);
+            return msg;
+            
+            console.log("getplayerid success");
+        }
+    });
+}
 /* ajax call which posts the score to the server*/
-function postscore(){
-//var thescore= ();
+function postscore(score){
+    //var thescore= ();
+    pid = returnpid();
+    var data = { id: pid, score: score };
+
     	$.ajax({
 		type: "POST",
-	    	url: "api/score",
-	    	data: JSON.stringify({scorestring: currentscore}),
+	    	url: "play.aspx/recordscore",
+	    	data: JSON.stringify(data),
 	    	contentType: "application/json",
 	    	success: function (msg) {
 	        console.log(msg.d);
@@ -61,12 +78,12 @@ function postboard(playerId) {
         playerId = 1;
 
     var theboard = gettilearray();
-    var board = { playerid: playerId , arrayboard: theboard };
+    var data = { playerid: playerId , arrayboard: theboard };
 
     $.ajax({
         type: "POST",
-        url: "api/Board",
-        data: JSON.stringify(board),
+        url: "api/Score",
+        data: JSON.stringify(data),
         contentType: "application/json",
         dataType: "json",
         success: function (msg) {

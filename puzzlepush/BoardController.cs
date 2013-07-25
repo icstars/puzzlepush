@@ -29,7 +29,7 @@ namespace puzzlepush
             List<string> listboard = new List<string>();
             DataSet ds = new DataSet();
             SqlDataAdapter da;
-            var board = new Board { Id = id };
+            var board = new Board { boardid = id };
             try
             {
                 insertname.CommandType = CommandType.Text;
@@ -97,14 +97,13 @@ namespace puzzlepush
                 for (int k = 0; k < listboard.Count; k++)
                 {
                     string valparm = "@poz" + k + "";
-                    //insertname.Parameters.AddWithValue(valparm, listboard[k]);
 
                     insertname.Parameters.Add(new SqlParameter(valparm, listboard[k]));
                 }
 
                 
                 var boardID  = insertname.ExecuteScalar();
-                board.Id = Convert.ToInt32(boardID);
+                board.boardid = Convert.ToInt32(boardID);
                 conn.Close();
 
             }

@@ -21,7 +21,7 @@ namespace puzzlepush
         }
 
         [DataMember]
-        public int Id
+        public int boardid
         {
             get;
             set;

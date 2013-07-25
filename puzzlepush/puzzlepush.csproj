@@ -90,6 +90,7 @@
     <Content Include="ppproto.html" />
     <Content Include="randomarray.aspx" />
     <Content Include="Scripts\json2.js" />
+    <Content Include="Scripts\servicecalls-rigel.js" />
     <Content Include="Scripts\servicecalls.js" />
     <Content Include="Scripts\splash.js" />
     <Content Include="Scripts\test.js" />
@@ -171,6 +172,7 @@
       <DependentUpon>randomarray.aspx</DependentUpon>
     </Compile>
     <Compile Include="Score.cs" />
+    <Compile Include="ScoreController.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -210,7 +212,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>50588</DevelopmentServerPort>
+          <DevelopmentServerPort>56086</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
