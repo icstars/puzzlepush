@@ -111,15 +111,15 @@ namespace puzzlepush
             return json;
         }
 
-      /*  [WebMethod]
-        public static string postboard(Board board)
+        [WebMethod]
+        public static string postboard(List<string> board)
         {
             string json;
             List<string> listboard = new List<string>();
 
             try
             {
-                foreach (string image in board.arrayboard)
+                foreach (string image in board)
                 {
                     listboard.Add(image);
                 }
@@ -127,8 +127,9 @@ namespace puzzlepush
                 var conn = connect("puzzlepush");
                 SqlCommand insertname = new SqlCommand("insertboard", conn);
                 insertname.CommandType = CommandType.StoredProcedure;
-                Debug.Write(insertname);  
-                insertname.Parameters.Add(new SqlParameter("@P_id",board.playerid));
+                Debug.Write(insertname);
+                string id = getpid().ToString();
+                insertname.Parameters.Add(new SqlParameter("@P_Id","3"));
                 for (int k = 0; k < listboard.Count; k++)
                 {
                     string valparm = "@poz" + k + "";
@@ -137,8 +138,8 @@ namespace puzzlepush
                 }
 
                 
-                var boardID  = insertname.ExecuteScalar();
-                board.boardid = Convert.ToInt32(boardID);
+                var recordsin  = insertname.ExecuteNonQuery();
+                
                 conn.Close();
                 json = "success";
 
@@ -155,15 +156,15 @@ namespace puzzlepush
         }
 
         [WebMethod]
-        public Board getboard(int id)
+        public static string loadboard(int id)
         {
-
-            string query = "SELECT * FROM poz1 WHERE poz_id=@poz_id";
+            string json;
+            string query = "SELECT * FROM poz1 WHERE P_id = 2";
             SqlCommand insertname = new SqlCommand();
             List<string> listboard = new List<string>();
             DataSet ds = new DataSet();
             SqlDataAdapter da;
-            var board = new Board { boardid = id };
+            //var board = new Board { boardid = id };
             try
             {
                 insertname.CommandType = CommandType.Text;
@@ -172,7 +173,7 @@ namespace puzzlepush
                 var conn = connect("puzzlepush");
 
                 insertname = new SqlCommand(query, conn);
-                insertname.Parameters.Add(new SqlParameter("@poz_id", id));
+                insertname.Parameters.Add(new SqlParameter("@P_Id", "1"));
 
                 da = new SqlDataAdapter(query, conn);
                 da.Fill(ds, "loadboard");
@@ -181,34 +182,25 @@ namespace puzzlepush
 
                 conn.Close();
 
-                List<string> stringlist = new List<string>();
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     string s = (string)dt.Rows[i]["loadboard"];
-                    stringlist.Add(s);
+                    listboard.Add(s);
 
                 }
 
-                //makes a 2D array from the dataTable List
-                for (int i = 0; i < 5; i++)
-                {
-                    for (int j = 0; j < 5; j++)
-                    {
-                        String n = stringlist[i];
-                        board.arrayboard[i, j] = n;
-                    };
-                }
+                json = JsonConvert.SerializeObject(listboard);
             }
 
             catch (Exception ex)
             {
-                //json = JsonConvert.SerializeObject("saveboard" + ex);
+                json = JsonConvert.SerializeObject("saveboard" + ex);
                 Debug.WriteLine(ex.Message);
 
             }
 
-            return board;
-        }*/
+            return json;
+        }
 
         [WebMethod]
         public static string recordscore(int id, int score)
@@ -322,20 +314,23 @@ namespace puzzlepush
         public static string getpid()
         {
             string json;
+            //int pid;
             // define a connection to the database
             try
             {
                 string sip = HttpContext.Current.Request.UserHostAddress;
-                json = JsonConvert.SerializeObject(sip);
+                //json = JsonConvert.SerializeObject(sip);
                 //run an sql query and create a dataset to store the result
-                SqlDataAdapter MyAdapter = new SqlDataAdapter("select P_id from splashPage WHERE ipAddress ="+sip+"", connect("puzzlepush"));
+                SqlDataAdapter MyAdapter = new SqlDataAdapter("select P_Id from splashPage WHERE ipAddress ="+sip+"", connect("puzzlepush"));
                 DataSet ds = new DataSet();
 
                 //fill the dataset with the results from the sql query and name the table 'hw'
 
                 MyAdapter.Fill(ds, "hw");
-                //Using Newtonsoft's JSON.NET, convert our dataset object from C# to JSON (JavaScript Object Notation)
                 json = JsonConvert.SerializeObject(ds);
+                //pid = ds.Tables["hw"].Rows["P_Id"][0];
+                //Using Newtonsoft's JSON.NET, convert our dataset object from C# to JSON (JavaScript Object Notation)
+                
                 conn.Close();
             }
 

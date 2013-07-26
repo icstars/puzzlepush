@@ -34,7 +34,7 @@ function getplayerid() {
 function postscore(score){
     //var thescore= ();
     pid = returnpid();
-    var data = { id: pid, score: score };
+    var data = { id: "3", score: score };
 
     	$.ajax({
 		type: "POST",
@@ -66,27 +66,24 @@ function getsafetytip() {
 } */
 
 /*postboard takes playerId and saves an array of the gameboard*/
-function postboard(playerId) {
+function postboard(board) {
 
-    /*
-    var theboard = new Array(5);
+  
     
-    console.log(theboard);
-    console.log(theboard[0][1]); */
+    console.log(board);
 
-    if (!playerId)
-        playerId = 1;
+    
 
-    var theboard = gettilearray();
-    var data = { playerid: playerId , arrayboard: theboard };
+    var data = { board: board };
 
     $.ajax({
         type: "POST",
-        url: "play.aspx/saveboard",
+        url: "play.aspx/postboard",
         data: JSON.stringify(data),
         contentType: "application/json",
         dataType: "json",
         success: function (msg) {
+
             console.log(msg);
             console.log("postboard success");
         }
@@ -96,8 +93,9 @@ function postboard(playerId) {
 function getboard(Id) {
     
     $.ajax({
-        type: "GET",
-        url: "play.aspx/getboard,
+        type: "POST",
+        url: "play.aspx/loadboard",
+        data: JSON.stringify({ id: Id }),
         contentType: "application/json",
         dataType: "json",
         success: function (result) {

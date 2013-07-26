@@ -28,13 +28,13 @@
         $(".load").click(function () {
             //always start id with hash tags
             //always start classes with a "." javascript
-            getboard(1);//Id is the arg for getboard
+            getboard(3);//Id is the arg for getboard
 
         });
         $(".housepg").click(function () {
             //always start id with hash tags
             //always start classes with a "." javascript
-            postboard(3);//playerId is the arg for postboard
+            postboard(gettilelist());//playerId is the arg for postboard
             postscore(25); //45 is the score that will be posted
             $("#boardpage").fadeOut(500);
 
@@ -66,6 +66,13 @@
             }
         }
         return theboard;
+    }
+    function gettilelist() {
+        var thelist = new Array();
+        for (i=0;i<25;i++){
+            thelist.push(i);
+        }
+        return thelist;
     }
 
     function returnpid(){
